@@ -1,8 +1,18 @@
-import { collection, getDocs, addDoc, doc, getDoc } from "firebase/firestore";
-import { NavLink } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { db } from "../../configs/firebase";
 import ModalAdd from "../../components/ModalAdd";
 import ModalDetail from "../../components/ModalDetail";
+import ModalEdit from "../../components/ModalEdit";
 const { useState, useEffect } = require("react");
 
 const AllUsers = () => {
@@ -27,6 +37,7 @@ const AllUsers = () => {
     await addDoc(userCollection, { name: data.name, email: data.email });
     setIsOpenModalAdd(false);
     await loadUsers();
+    toast.success("Add user successfully");
   };
 
   // modal detail
@@ -53,12 +64,47 @@ const AllUsers = () => {
   };
   //
 
+  // modal edit
+  const [userEdit, setUserEdit] = useState({});
+
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState(false);
+
+  const closeModalEdit = () => {
+    setIsOpenModalEdit(false);
+  };
+  const openModalEdit = () => {
+    setIsOpenModalEdit(true);
+  };
+  const handleEditUser = (user) => {
+    openModalEdit();
+    setUserEdit(user);
+  };
+
+  const editUser = async (user) => {
+    const userDoc = doc(db, "Users", user.id);
+    const newFields = { name: user.name, email: user.email };
+    await updateDoc(userDoc, newFields);
+    setIsOpenModalEdit(false);
+    toast.warning("Edit successfully");
+  };
+  //
+
+  // delete
+  const handleDeleteUser = async (user) => {
+    const userDoc = doc(db, "Users", user?.id);
+    await deleteDoc(userDoc);
+    await loadUsers();
+    toast.error("Delete successfully");
+  };
+  //
+
   useEffect(() => {
     loadUsers();
   }, []);
 
   return (
     <div>
+      <ToastContainer />
       <ModalAdd
         isOpenModalAdd={isOpenModalAdd}
         createNewUser={createNewUser}
@@ -72,19 +118,26 @@ const AllUsers = () => {
         detailUser={detailUser}
         modalDetailUser={true}
       />
+
+      <ModalEdit
+        isOpenModalEdit={isOpenModalEdit}
+        closeModalEdit={closeModalEdit}
+        userEdit={userEdit}
+        modalEditUser={true}
+        editUser={editUser}
+      />
+
       <button onClick={() => openModalAdd()}>Add</button>
       {users &&
         users.map((user, index) => (
           <div key={index}>
             <div>Email: {user.email}</div>
             <div>Name: {user.name}</div>
-            <div>Role: {user.role}</div>
+            {/* <div>Id: {user.id}</div> */}
             <div>
-              <button>
-                <NavLink to={`user/${user.id}`}>Edit</NavLink>
-              </button>
+              <button onClick={() => handleEditUser(user)}>Edit</button>
               <button onClick={() => handleDetailUser(user)}>Detail</button>
-              <button>Delete</button>
+              <button onClick={() => handleDeleteUser(user)}>Delete</button>
             </div>
           </div>
         ))}

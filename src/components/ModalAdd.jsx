@@ -108,24 +108,4 @@ const ModalAdd = (props) => {
   );
 };
 
-// const ModalAdd = () => {
-//   return (
-//     <div>
-//       <input
-//         type="text"
-//         placeholder="Enter name"
-//         onChange={(e) => setNameUser(e.target.value)}
-//       />
-//       <input
-//         type="text"
-//         placeholder="Enter email"
-//         onChange={(e) => setEmail(e.target.value)}
-//       />
-//       <button type="submit" onClick={(e) => handleAddUser()}>
-//         Add
-//       </button>
-//     </div>
-//   );
-// };
-
 export default ModalAdd;

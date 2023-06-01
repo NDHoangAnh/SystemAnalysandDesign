@@ -6,6 +6,7 @@ const ModalDetail = (props) => {
     props;
   return (
     <div>
+      {/* user */}
       {modalDetailUser && detailUser && (
         <Modal
           open={isOpenModalDetail}
