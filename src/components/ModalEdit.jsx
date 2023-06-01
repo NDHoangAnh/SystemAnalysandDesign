@@ -42,7 +42,7 @@ const ModalEdit = (props) => {
     return isValid;
   };
 
-  const handleEditUser = () => {
+  const handleUpdateUser = () => {
     let check = checkValidInputUser();
     if (check === true) {
       editUser(userToEdit);
@@ -67,6 +67,7 @@ const ModalEdit = (props) => {
                 id="name"
                 aria-describedby="helper-name"
                 name="name"
+                defaultValue={name}
                 value={name}
                 onChange={(e) => handleOnChangeInputUser(e)}
               />
@@ -81,6 +82,7 @@ const ModalEdit = (props) => {
                 id="email"
                 aria-describedby="helper-email"
                 name="email"
+                defaultValue={email}
                 value={email}
                 onChange={(e) => handleOnChangeInputUser(e)}
               />
@@ -91,12 +93,12 @@ const ModalEdit = (props) => {
 
             <Box>
               <Button
-                onClick={() => handleEditUser()}
+                onClick={() => handleUpdateUser()}
                 type="submit"
                 color="secondary"
                 variant="contained"
               >
-                Add
+                Edit
               </Button>
             </Box>
           </Box>

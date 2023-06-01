@@ -81,10 +81,11 @@ const AllUsers = () => {
   };
 
   const editUser = async (user) => {
-    const userDoc = doc(db, "Users", user.id);
+    const userDoc = doc(db, "Users", userEdit.id);
     const newFields = { name: user.name, email: user.email };
     await updateDoc(userDoc, newFields);
     setIsOpenModalEdit(false);
+    await loadUsers();
     toast.warning("Edit successfully");
   };
   //
