@@ -1,7 +1,8 @@
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc, getDoc } from "firebase/firestore";
 import { NavLink } from "react-router-dom";
 import { db } from "../../configs/firebase";
 import ModalAdd from "../../components/ModalAdd";
+import ModalDetail from "../../components/ModalDetail";
 const { useState, useEffect } = require("react");
 
 const AllUsers = () => {
@@ -28,6 +29,30 @@ const AllUsers = () => {
     await loadUsers();
   };
 
+  // modal detail
+  const [detailUser, setDetailUser] = useState({});
+
+  const [isOpenModalDetail, setIsOpenModalDetail] = useState(false);
+
+  const closeModalDetail = () => {
+    setIsOpenModalDetail(false);
+  };
+  const openModalDetail = () => {
+    setIsOpenModalDetail(true);
+  };
+
+  const getDetailUser = async (user) => {
+    const documentRef = doc(db, "Users", user?.id);
+    const documentSnapshot = await getDoc(documentRef);
+    setDetailUser(documentSnapshot.data());
+  };
+
+  const handleDetailUser = (user) => {
+    openModalDetail();
+    getDetailUser(user);
+  };
+  //
+
   useEffect(() => {
     loadUsers();
   }, []);
@@ -40,6 +65,13 @@ const AllUsers = () => {
         closeModalAdd={closeModalAdd}
         modalUser={true}
       />
+
+      <ModalDetail
+        isOpenModalDetail={isOpenModalDetail}
+        closeModalDetail={closeModalDetail}
+        detailUser={detailUser}
+        modalDetailUser={true}
+      />
       <button onClick={() => openModalAdd()}>Add</button>
       {users &&
         users.map((user, index) => (
@@ -51,7 +83,7 @@ const AllUsers = () => {
               <button>
                 <NavLink to={`user/${user.id}`}>Edit</NavLink>
               </button>
-              <button>Detail</button>
+              <button onClick={() => handleDetailUser(user)}>Detail</button>
               <button>Delete</button>
             </div>
           </div>
