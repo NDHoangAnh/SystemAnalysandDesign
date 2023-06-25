@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getAllServices, addService, deleteService } from "../../apis";
+import {
+  getAllServices,
+  addService,
+  deleteService,
+  editService,
+} from "../../apis";
 import {
   Table,
   TableBody,
@@ -31,7 +36,34 @@ function AllServices() {
     description: "",
     phone: "",
   });
+
   const [openDialog, setOpenDialog] = useState(false);
+
+  // edit
+  const [openDialogEdit, setOpenDialogEdit] = useState(false);
+
+  const handleShowDialogEdit = (data) => {
+    setInfoService({
+      name: data.service_name,
+      description: data.description,
+      phone: data.phone,
+    });
+
+    setOpenDialogEdit(true);
+  };
+
+  const handleCloseDialogEdit = () => {
+    setOpenDialogEdit(false);
+  };
+  const handleEditService = async () => {
+    const nameServiceEdit = infoService.name;
+    const resultEdit = await editService(nameServiceEdit, infoService);
+    toast.success(resultEdit.message);
+    const result = await getAllServices();
+    setServices(result);
+    handleCloseDialogEdit();
+  };
+  //
 
   const handleOnChangeInputService = (e) => {
     setInfoService({ ...infoService, [e.target.name]: e.target.value });
@@ -70,7 +102,7 @@ function AllServices() {
 
   const handleAddService = async () => {
     const addResult = await addService(infoService);
-    if (addResult.saveService === null) toast.error(addResult.message);
+    if (addResult.saveService === undefined) toast.error(addResult.message);
     else toast.success(addResult.message);
     const result = await getAllServices();
     setServices(result);
@@ -118,10 +150,18 @@ function AllServices() {
                     <TableCell>{service.description}</TableCell>
                     <TableCell>{service.phone}</TableCell>
                     <TableCell align="center">
-                      <Button>Sửa</Button>
+                      <Button
+                        variant="contained"
+                        color="warning"
+                        onClick={() => handleShowDialogEdit(service)}
+                      >
+                        Sửa
+                      </Button>
                     </TableCell>
                     <TableCell align="center">
                       <Button
+                        variant="contained"
+                        color="error"
                         onClick={() =>
                           handleDeleteService(service.service_name)
                         }
@@ -157,7 +197,7 @@ function AllServices() {
                     id="name"
                     aria-describedby="helper-name"
                     name="name"
-                    value={infoService.service_name}
+                    value={infoService.name}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
                   <FormHelperText id="helper-name">
@@ -186,7 +226,9 @@ function AllServices() {
                     value={infoService.phone}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập email</FormHelperText>
+                  <FormHelperText id="helper-name">
+                    Nhập số điện thoại
+                  </FormHelperText>
                 </FormControl>
               </Box>
             </DialogContent>
@@ -196,6 +238,54 @@ function AllServices() {
                 variant="contained"
                 color="primary"
                 onClick={handleAddService}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={openDialogEdit} onClose={handleCloseDialogEdit}>
+            <DialogTitle>Edit Service</DialogTitle>
+            <DialogContent>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "25vw",
+                }}
+              >
+                <FormControl>
+                  <InputLabel htmlFor="name">Mô tả</InputLabel>
+                  <Input
+                    id="description"
+                    aria-describedby="helper-name"
+                    name="description"
+                    value={infoService.description}
+                    onChange={(e) => handleOnChangeInputService(e)}
+                  />
+                  <FormHelperText id="helper-name">Mô tả</FormHelperText>
+                </FormControl>
+
+                <FormControl>
+                  <InputLabel htmlFor="name">Số điện thoại</InputLabel>
+                  <Input
+                    id="phone"
+                    aria-describedby="helper-name"
+                    name="phone"
+                    value={infoService.phone}
+                    onChange={(e) => handleOnChangeInputService(e)}
+                  />
+                  <FormHelperText id="helper-name">
+                    Số điện thoại
+                  </FormHelperText>
+                </FormControl>
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDialog}>Cancel</Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleEditService()}
               >
                 Submit
               </Button>
