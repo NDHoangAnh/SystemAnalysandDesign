@@ -46,6 +46,15 @@ export const getAllServices = async () => {
   }
 };
 
+export const addService = async (data) => {
+  try {
+    const result = await axios.post(`${DOMAIN}/add-service`, data);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getService = async (name) => {
   try {
     const result = await axios.get(`${DOMAIN}/get-service?name=${name}`);
@@ -85,6 +94,15 @@ export const getAllStaffs = async () => {
 export const getStaff = async (email) => {
   try {
     const result = await axios.get(`${DOMAIN}/get-staff?email=${email}`);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addStaff = async (data) => {
+  try {
+    const result = await axios.post(`${DOMAIN}/add-staff`, data);
     return result.data;
   } catch (error) {
     console.log(error);

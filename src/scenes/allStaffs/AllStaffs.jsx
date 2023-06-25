@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
-import { getAllStaffs } from "../../apis";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { getAllStaffs, addStaff, deleteStaff } from "../../apis";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Box,
   Button,
   FormControl,
   FormHelperText,
   Input,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Fab,
 } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AllStaffs() {
   const [staffs, setStaffs] = useState([]);
@@ -46,6 +48,11 @@ function AllStaffs() {
   }, []);
 
   const handleOpenDialog = () => {
+    setInfoStaff({
+      name: "",
+      email: "",
+      phone: "",
+    });
     setOpenDialog(true);
   };
 
@@ -53,15 +60,36 @@ function AllStaffs() {
     setOpenDialog(false);
   };
 
-  const handleAddStaff = () => {
-    // Add staff logic here
-    // ...
-    // Close the dialog
+  const handleDeleteStaff = async (email) => {
+    const deleteResult = await deleteStaff(email);
+    toast.success(deleteResult.message);
+    const result = await getAllStaffs();
+    setStaffs(result);
+  };
+
+  const handleAddStaff = async () => {
+    const addResult = await addStaff(infoStaff);
+    if (addResult.saveStaff === null) toast.error(addResult.message);
+    else toast.success(addResult.message);
+    const result = await getAllStaffs();
+    setStaffs(result);
     handleCloseDialog();
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {(user.role === "user" || user.role === "staff") && (
         <div>Bạn không có quyền xem nội dung này</div>
       )}
@@ -87,7 +115,9 @@ function AllStaffs() {
                     <TableCell>{staff.username}</TableCell>
                     <TableCell>{staff.phone_number}</TableCell>
                     <TableCell>
-                      <Button>Xóa</Button>
+                      <Button onClick={() => handleDeleteStaff(staff.email)}>
+                        Xóa
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -140,13 +170,15 @@ function AllStaffs() {
                 <FormControl>
                   <InputLabel htmlFor="name">Số điện thoại</InputLabel>
                   <Input
-                    id="email"
+                    id="phone"
                     aria-describedby="helper-name"
-                    name="email"
+                    name="phone"
                     value={infoStaff.phone}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập email</FormHelperText>
+                  <FormHelperText id="helper-name">
+                    Nhập số điện thoại
+                  </FormHelperText>
                 </FormControl>
               </Box>
             </DialogContent>
@@ -154,7 +186,7 @@ function AllStaffs() {
               <Button onClick={handleCloseDialog}>Cancel</Button>
               <Button
                 variant="contained"
-                color="success"
+                color="primary"
                 onClick={handleAddStaff}
               >
                 Submit

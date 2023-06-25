@@ -1,31 +1,33 @@
 import { useEffect, useState } from "react";
-import { getAllServices } from "../../apis";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { getAllServices, addService, deleteService } from "../../apis";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Box,
   Button,
   FormControl,
   FormHelperText,
   Input,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Fab,
 } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AllServices() {
   const [services, setServices] = useState([]);
   const [infoService, setInfoService] = useState({
-    service_name: "",
+    name: "",
     description: "",
     phone: "",
   });
@@ -33,12 +35,12 @@ function AllServices() {
 
   const handleOnChangeInputService = (e) => {
     setInfoService({ ...infoService, [e.target.name]: e.target.value });
+    console.log(infoService);
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
   const loadService = async () => {
     const result = await getAllServices();
-    console.log(result);
     setServices(result);
   };
 
@@ -47,6 +49,11 @@ function AllServices() {
   }, []);
 
   const handleOpenDialog = () => {
+    setInfoService({
+      name: "",
+      description: "",
+      phone: "",
+    });
     setOpenDialog(true);
   };
 
@@ -54,15 +61,36 @@ function AllServices() {
     setOpenDialog(false);
   };
 
-  const handleAddService = () => {
-    // Add staff logic here
-    // ...
-    // Close the dialog
+  const handleDeleteService = async (name) => {
+    const deleteResult = await deleteService(name);
+    toast.success(deleteResult.message);
+    const result = await getAllServices();
+    setServices(result);
+  };
+
+  const handleAddService = async () => {
+    const addResult = await addService(infoService);
+    if (addResult.saveService === null) toast.error(addResult.message);
+    else toast.success(addResult.message);
+    const result = await getAllServices();
+    setServices(result);
     handleCloseDialog();
   };
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {(user.role === "user" || user.role === "staff") && (
         <div>Bạn không có quyền xem nội dung này</div>
       )}
@@ -93,7 +121,13 @@ function AllServices() {
                       <Button>Sửa</Button>
                     </TableCell>
                     <TableCell align="center">
-                      <Button>Xóa</Button>
+                      <Button
+                        onClick={() =>
+                          handleDeleteService(service.service_name)
+                        }
+                      >
+                        Xóa
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -114,15 +148,15 @@ function AllServices() {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  width: "40vw",
+                  width: "25vw",
                 }}
               >
                 <FormControl>
                   <InputLabel htmlFor="name">Tên dịch vụ</InputLabel>
                   <Input
-                    id="service_name"
+                    id="name"
                     aria-describedby="helper-name"
-                    name="service_name"
+                    name="name"
                     value={infoService.service_name}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
@@ -160,7 +194,7 @@ function AllServices() {
               <Button onClick={handleCloseDialog}>Cancel</Button>
               <Button
                 variant="contained"
-                color="success"
+                color="primary"
                 onClick={handleAddService}
               >
                 Submit
