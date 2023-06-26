@@ -11,7 +11,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormHelperText,
   Input,
   InputLabel,
   Dialog,
@@ -139,6 +138,8 @@ function AllStaffs() {
                   display: "flex",
                   flexDirection: "column",
                   width: "25vw",
+                  gap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
                 <FormControl>
@@ -150,9 +151,6 @@ function AllStaffs() {
                     value={infoStaff.name}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Nhập tên nhân viên
-                  </FormHelperText>
                 </FormControl>
 
                 <FormControl>
@@ -164,7 +162,6 @@ function AllStaffs() {
                     value={infoStaff.email}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập email</FormHelperText>
                 </FormControl>
 
                 <FormControl>
@@ -176,9 +173,6 @@ function AllStaffs() {
                     value={infoStaff.phone}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Nhập số điện thoại
-                  </FormHelperText>
                 </FormControl>
               </Box>
             </DialogContent>

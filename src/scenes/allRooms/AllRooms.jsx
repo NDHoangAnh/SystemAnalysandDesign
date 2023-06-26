@@ -1,50 +1,59 @@
 import { useEffect, useState } from "react";
-import { getAllRooms } from "../../apis";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { getAllRooms, deleteRoom } from "../../apis";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Box,
   Button,
   FormControl,
   FormHelperText,
   Input,
   InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Fab,
 } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function AllRooms() {
   const [rooms, setRooms] = useState([]);
-  const [infoStaff, setInfoStaff] = useState({
-    name: "",
-    email: "",
-    phone: "",
+  const [infoRoom, setInfoRoom] = useState({
+    numRoom: 0,
+    description: "",
+    image1: "",
+    image2: "",
+    type: 0,
+    service: [],
   });
   const [openDialog, setOpenDialog] = useState(false);
+  const [openDetailDialog, setOpenDetailDialog] = useState(false);
 
   const handleOnChangeInputStaff = (e) => {
-    setInfoStaff({ ...infoStaff, [e.target.name]: e.target.value });
+    setInfoRoom({ ...infoRoom, [e.target.name]: e.target.value });
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
   const loadStaff = async () => {
     const result = await getAllRooms();
-    console.log(result);
     setRooms(result);
   };
 
   useEffect(() => {
     loadStaff();
   }, []);
+
+  const handleOpenDetailDialog = () => {};
+
+  const handleCloseDetailDialog = () => {};
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -54,7 +63,14 @@ function AllRooms() {
     setOpenDialog(false);
   };
 
-  const handleAddStaff = () => {
+  const handleDeleteRoom = async (num) => {
+    const deleteResult = await deleteRoom(num);
+    toast.success(deleteResult.message);
+    const result = await getAllRooms();
+    setRooms(result);
+  };
+
+  const handleAddRoom = () => {
     // Add staff logic here
     // ...
     // Close the dialog
@@ -63,6 +79,18 @@ function AllRooms() {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       {(user.role === "user" || user.role === "staff") && (
         <div>Bạn không có quyền xem nội dung này</div>
       )}
@@ -74,8 +102,14 @@ function AllRooms() {
                 <TableRow>
                   <TableCell>Số phòng</TableCell>
                   <TableCell>Mô tả</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>Action</TableCell>
+                  {user.role === "admin" && (
+                    <TableCell align="center" colSpan={3}>
+                      Action
+                    </TableCell>
+                  )}
+                  {(user.role === "user" || user.role === "staff") && (
+                    <TableCell align="center">Action</TableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -86,12 +120,21 @@ function AllRooms() {
                   >
                     <TableCell>{room.numRoom}</TableCell>
                     <TableCell>{room.description}</TableCell>
-                    <TableCell>
+                    <TableCell align="center">
                       <Button>Chi tiết</Button>
                     </TableCell>
-                    <TableCell>
-                      <Button>Xóa</Button>
-                    </TableCell>
+                    {user.role === "admin" && (
+                      <TableCell align="center">
+                        <Button>Sửa</Button>
+                      </TableCell>
+                    )}
+                    {user.role === "admin" && (
+                      <TableCell align="center">
+                        <Button onClick={() => handleDeleteRoom(room.numRoom)}>
+                          Xóa
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
@@ -112,6 +155,8 @@ function AllRooms() {
                   display: "flex",
                   flexDirection: "column",
                   width: "25vw",
+                  gap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
                 <FormControl>
@@ -120,7 +165,7 @@ function AllRooms() {
                     id="name"
                     aria-describedby="helper-name"
                     name="name"
-                    value={infoStaff.name}
+                    value={infoRoom.name}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
                   <FormHelperText id="helper-name">
@@ -134,7 +179,7 @@ function AllRooms() {
                     id="email"
                     aria-describedby="helper-name"
                     name="email"
-                    value={infoStaff.email}
+                    value={infoRoom.email}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
                   <FormHelperText id="helper-name">Nhập email</FormHelperText>
@@ -146,7 +191,7 @@ function AllRooms() {
                     id="email"
                     aria-describedby="helper-name"
                     name="email"
-                    value={infoStaff.phone}
+                    value={infoRoom.phone}
                     onChange={(e) => handleOnChangeInputStaff(e)}
                   />
                   <FormHelperText id="helper-name">Nhập email</FormHelperText>
@@ -158,7 +203,7 @@ function AllRooms() {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleAddStaff}
+                onClick={handleAddRoom}
               >
                 Submit
               </Button>

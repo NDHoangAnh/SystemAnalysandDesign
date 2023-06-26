@@ -16,7 +16,6 @@ import {
   Box,
   Button,
   FormControl,
-  FormHelperText,
   Input,
   InputLabel,
   Dialog,
@@ -55,6 +54,7 @@ function AllServices() {
   const handleCloseDialogEdit = () => {
     setOpenDialogEdit(false);
   };
+
   const handleEditService = async () => {
     const nameServiceEdit = infoService.name;
     const resultEdit = await editService(nameServiceEdit, infoService);
@@ -189,6 +189,8 @@ function AllServices() {
                   display: "flex",
                   flexDirection: "column",
                   width: "25vw",
+                  gap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
                 <FormControl>
@@ -200,9 +202,6 @@ function AllServices() {
                     value={infoService.name}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Nhập tên dịch vụ
-                  </FormHelperText>
                 </FormControl>
 
                 <FormControl>
@@ -214,7 +213,6 @@ function AllServices() {
                     value={infoService.description}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập mô tả</FormHelperText>
                 </FormControl>
 
                 <FormControl>
@@ -226,9 +224,6 @@ function AllServices() {
                     value={infoService.phone}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Nhập số điện thoại
-                  </FormHelperText>
                 </FormControl>
               </Box>
             </DialogContent>
@@ -251,6 +246,8 @@ function AllServices() {
                   display: "flex",
                   flexDirection: "column",
                   width: "25vw",
+                  gap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
                 <FormControl>
@@ -262,7 +259,6 @@ function AllServices() {
                     value={infoService.description}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">Mô tả</FormHelperText>
                 </FormControl>
 
                 <FormControl>
@@ -274,14 +270,11 @@ function AllServices() {
                     value={infoService.phone}
                     onChange={(e) => handleOnChangeInputService(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Số điện thoại
-                  </FormHelperText>
                 </FormControl>
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleCloseDialog}>Cancel</Button>
+              <Button onClick={handleCloseDialogEdit}>Cancel</Button>
               <Button
                 variant="contained"
                 color="primary"
