@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllRooms, deleteRoom } from "../../apis";
+import { getAllRooms, deleteRoom, addRoom } from "../../apis";
 import {
   Box,
   Button,
@@ -17,40 +17,32 @@ import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Room from "../../containers/room/Room";
+import "./AllRooms.css";
 
 function AllRooms() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [rooms, setRooms] = useState([]);
+
   const [infoRoom, setInfoRoom] = useState({
-    numRoom: 0,
+    numRoom: null,
     description: "",
-    image1: "",
-    image2: "",
+    image_1: "",
+    image_2: "",
     type: 0,
     service: [],
   });
+
   const [openDialog, setOpenDialog] = useState(false);
-  // const [openDetailDialog, setOpenDetailDialog] = useState(false);
-
-  const handleOnChangeInfoRoom = (e) => {
-    setInfoRoom({ ...infoRoom, [e.target.name]: e.target.value });
-  };
-
-  const user = JSON.parse(localStorage.getItem("user"));
-  const loadRooms = async () => {
-    const result = await getAllRooms();
-    setRooms(result);
-  };
-
-  // const handleOpenDetailDialog = () => {};
-
-  // const handleCloseDetailDialog = () => {};
-
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleOnChangeInfoRoom = (e) => {
+    setInfoRoom({ ...infoRoom, [e.target.name]: e.target.value });
   };
 
   const handleDeleteRoom = async (num) => {
@@ -60,14 +52,22 @@ function AllRooms() {
     setRooms(result);
   };
 
-  const handleAddRoom = () => {
-    // Add staff logic here
-    // ...
-    // Close the dialog
+  const handleAddRoom = async () => {
+    const addResult = await addRoom(infoRoom);
+    if (addResult.saveRoom === undefined) {
+      toast.error(addResult.message);
+    } else {
+      toast.success(addResult.message);
+    }
+    const results = await getAllRooms();
+    setRooms(results);
     handleCloseDialog();
   };
-  console.log(rooms);
 
+  const loadRooms = async () => {
+    const result = await getAllRooms();
+    setRooms(result);
+  };
   useEffect(() => {
     loadRooms();
   }, []);
@@ -87,61 +87,25 @@ function AllRooms() {
         theme="colored"
       />
       {(user.role === "user" || user.role === "staff") && (
-        <div>Bạn không có quyền xem nội dung này</div>
+        <div className="list-room">
+          {rooms.map((room, index) => (
+            <div>
+              <Room room={room} key={index} />
+            </div>
+          ))}
+        </div>
       )}
       {user.role === "admin" && (
         <>
-          {/* <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Số phòng</TableCell>
-                  <TableCell>Mô tả</TableCell>
-                  {user.role === "admin" && (
-                    <TableCell align="center" colSpan={3}>
-                      Action
-                    </TableCell>
-                  )}
-                  {(user.role === "user" || user.role === "staff") && (
-                    <TableCell align="center">Action</TableCell>
-                  )}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rooms.map((room, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell>{room.numRoom}</TableCell>
-                    <TableCell>{room.description}</TableCell>
-                    <TableCell align="center">
-                      <Button>Chi tiết</Button>
-                    </TableCell>
-                    {user.role === "admin" && (
-                      <TableCell align="center">
-                        <Button>Sửa</Button>
-                      </TableCell>
-                    )}
-                    {user.role === "admin" && (
-                      <TableCell align="center">
-                        <Button onClick={() => handleDeleteRoom(room.numRoom)}>
-                          Xóa
-                        </Button>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer> */}
           <div className="list-room">
             {rooms.map((room, index) => (
-              <Room
-                room={room}
-                key={index}
-                handleDeleteRoom={handleDeleteRoom}
-              />
+              <div>
+                <Room
+                  room={room}
+                  key={index}
+                  handleDeleteRoom={handleDeleteRoom}
+                />
+              </div>
             ))}
           </div>
           <Fab
@@ -164,41 +128,58 @@ function AllRooms() {
                 }}
               >
                 <FormControl>
-                  <InputLabel htmlFor="name">Số phòng</InputLabel>
+                  <InputLabel htmlFor="numRoom">Số phòng</InputLabel>
                   <Input
-                    id="name"
+                    id="numRoom"
                     aria-describedby="helper-name"
-                    name="name"
-                    value={infoRoom.name}
+                    name="numRoom"
+                    value={infoRoom.numRoom}
                     onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
-                  <FormHelperText id="helper-name">
-                    Nhập tên nhân viên
-                  </FormHelperText>
                 </FormControl>
 
                 <FormControl>
-                  <InputLabel htmlFor="name">Email</InputLabel>
+                  <InputLabel htmlFor="description">Mô tả phòng</InputLabel>
                   <Input
-                    id="email"
+                    id="description"
                     aria-describedby="helper-name"
-                    name="email"
-                    value={infoRoom.email}
+                    name="description"
+                    value={infoRoom.description}
                     onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập email</FormHelperText>
                 </FormControl>
 
                 <FormControl>
-                  <InputLabel htmlFor="name">Số điện thoại</InputLabel>
+                  <InputLabel htmlFor="image_1">Ảnh mô tả số 1</InputLabel>
                   <Input
-                    id="email"
+                    id="image_1"
                     aria-describedby="helper-name"
-                    name="email"
-                    value={infoRoom.phone}
+                    name="image_1"
+                    value={infoRoom.image_1}
                     onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
-                  <FormHelperText id="helper-name">Nhập email</FormHelperText>
+                </FormControl>
+
+                <FormControl>
+                  <InputLabel htmlFor="image_2">Ảnh mô tả số 2</InputLabel>
+                  <Input
+                    id="image_2"
+                    aria-describedby="helper-name"
+                    name="image_2"
+                    value={infoRoom.image_2}
+                    onChange={(e) => handleOnChangeInfoRoom(e)}
+                  />
+                </FormControl>
+
+                <FormControl>
+                  <InputLabel htmlFor="type">Ảnh mô tả số 2</InputLabel>
+                  <Input
+                    id="type"
+                    aria-describedby="helper-name"
+                    name="type"
+                    value={infoRoom.type}
+                    onChange={(e) => handleOnChangeInfoRoom(e)}
+                  />
                 </FormControl>
               </Box>
             </DialogContent>

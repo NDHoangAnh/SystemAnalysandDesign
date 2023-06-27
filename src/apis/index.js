@@ -1,6 +1,15 @@
 import axios from "axios";
 import { DOMAIN } from "../configs/constants";
 
+export const addRoom = async (data) => {
+  try {
+    const result = await axios.post(`${DOMAIN}/add-room`, data);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const getAllRooms = async () => {
   try {
     const result = await axios.get(`${DOMAIN}/get-room?id=all`);
