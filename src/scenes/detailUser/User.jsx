@@ -1,30 +1,10 @@
 import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Box,
-  Button,
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Fab,
-} from "@mui/material";
+import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 import { editUser } from "../../apis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function User() {
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
   const [userInfo, setUserInfo] = useState({
     email: user.email,
     phone: user.phone_number,

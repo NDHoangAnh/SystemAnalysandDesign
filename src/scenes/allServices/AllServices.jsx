@@ -67,7 +67,6 @@ function AllServices() {
 
   const handleOnChangeInputService = (e) => {
     setInfoService({ ...infoService, [e.target.name]: e.target.value });
-    console.log(infoService);
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
