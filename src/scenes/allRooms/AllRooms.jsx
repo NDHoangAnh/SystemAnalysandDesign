@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllRooms, deleteRoom } from "../../apis";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Box,
   Button,
   FormControl,
@@ -23,6 +16,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Room from "../../containers/room/Room";
 
 function AllRooms() {
   const [rooms, setRooms] = useState([]);
@@ -35,25 +29,21 @@ function AllRooms() {
     service: [],
   });
   const [openDialog, setOpenDialog] = useState(false);
-  const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  // const [openDetailDialog, setOpenDetailDialog] = useState(false);
 
-  const handleOnChangeInputStaff = (e) => {
+  const handleOnChangeInfoRoom = (e) => {
     setInfoRoom({ ...infoRoom, [e.target.name]: e.target.value });
   };
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const loadStaff = async () => {
+  const loadRooms = async () => {
     const result = await getAllRooms();
     setRooms(result);
   };
 
-  useEffect(() => {
-    loadStaff();
-  }, []);
+  // const handleOpenDetailDialog = () => {};
 
-  const handleOpenDetailDialog = () => {};
-
-  const handleCloseDetailDialog = () => {};
+  // const handleCloseDetailDialog = () => {};
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -76,6 +66,11 @@ function AllRooms() {
     // Close the dialog
     handleCloseDialog();
   };
+  console.log(rooms);
+
+  useEffect(() => {
+    loadRooms();
+  }, []);
 
   return (
     <>
@@ -95,8 +90,8 @@ function AllRooms() {
         <div>Bạn không có quyền xem nội dung này</div>
       )}
       {user.role === "admin" && (
-        <div className="list-staff">
-          <TableContainer component={Paper}>
+        <>
+          {/* <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -139,7 +134,16 @@ function AllRooms() {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
+          </TableContainer> */}
+          <div className="list-room">
+            {rooms.map((room, index) => (
+              <Room
+                room={room}
+                key={index}
+                handleDeleteRoom={handleDeleteRoom}
+              />
+            ))}
+          </div>
           <Fab
             color="primary"
             onClick={handleOpenDialog}
@@ -166,7 +170,7 @@ function AllRooms() {
                     aria-describedby="helper-name"
                     name="name"
                     value={infoRoom.name}
-                    onChange={(e) => handleOnChangeInputStaff(e)}
+                    onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
                   <FormHelperText id="helper-name">
                     Nhập tên nhân viên
@@ -180,7 +184,7 @@ function AllRooms() {
                     aria-describedby="helper-name"
                     name="email"
                     value={infoRoom.email}
-                    onChange={(e) => handleOnChangeInputStaff(e)}
+                    onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
                   <FormHelperText id="helper-name">Nhập email</FormHelperText>
                 </FormControl>
@@ -192,7 +196,7 @@ function AllRooms() {
                     aria-describedby="helper-name"
                     name="email"
                     value={infoRoom.phone}
-                    onChange={(e) => handleOnChangeInputStaff(e)}
+                    onChange={(e) => handleOnChangeInfoRoom(e)}
                   />
                   <FormHelperText id="helper-name">Nhập email</FormHelperText>
                 </FormControl>
@@ -209,7 +213,7 @@ function AllRooms() {
               </Button>
             </DialogActions>
           </Dialog>
-        </div>
+        </>
       )}
     </>
   );
