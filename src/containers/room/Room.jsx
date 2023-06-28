@@ -7,11 +7,21 @@ import Typography from "@mui/material/Typography";
 import "react-toastify/dist/ReactToastify.css";
 
 import ModalDelete from "../../components/ModalDelete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalDetail from "../../components/ModalDetail";
+import { getRoomByNumber } from "../../apis";
 
-export default function Room({ room, handleDeleteRoom }) {
+export default function Room({ room, handleDeleteRoom, handleDetailRoom }) {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [detailRoom, setDetailRoom] = useState();
+  const loadDetailRoom = async () => {
+    const res = await handleDetailRoom(room.numRoom);
+    setDetailRoom(res);
+  };
+
+  useEffect(() => {
+    loadDetailRoom();
+  }, []);
 
   // delete
   const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -28,7 +38,8 @@ export default function Room({ room, handleDeleteRoom }) {
       ? "Phòng bình dân"
       : room.type === 2
       ? "Phòng thương gia"
-      : "Phòng tổng thống";
+      : "Phòng Vip";
+
   return (
     <>
       <ModalDelete
@@ -41,7 +52,7 @@ export default function Room({ room, handleDeleteRoom }) {
       <ModalDetail
         open={openModalDetail}
         handleClose={handleCloseModalDetail}
-        room={room}
+        room={detailRoom}
       />
       <Card sx={{ maxWidth: 345, padding: "10px" }}>
         <CardMedia

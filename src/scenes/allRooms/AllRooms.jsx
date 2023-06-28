@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { getAllRooms, deleteRoom, addRoom } from "../../apis";
+import {
+  getAllRooms,
+  deleteRoom,
+  addRoom,
+  getAllServices,
+  getRoomByNumber,
+} from "../../apis";
 import {
   Box,
   Button,
@@ -18,19 +24,30 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Room from "../../containers/room/Room";
 import "./AllRooms.css";
+import DropDown from "../../components/DropDownSelect";
 
 function AllRooms() {
   const user = JSON.parse(localStorage.getItem("user"));
+
   const [rooms, setRooms] = useState([]);
+  const [services, setServices] = useState([]);
 
   const [infoRoom, setInfoRoom] = useState({
     numRoom: null,
     description: "",
     image_1: "",
     image_2: "",
-    type: 0,
-    service: [],
   });
+
+  const [type, setType] = useState(null);
+  const handleTypeChange = (_type) => {
+    setType(_type);
+  };
+
+  const [serviceChoiceUser, setServiceChoiceUser] = useState(null);
+  const handleChangeService = (_service) => {
+    setServiceChoiceUser(_service);
+  };
 
   const [openDialog, setOpenDialog] = useState(false);
   const handleOpenDialog = () => {
@@ -53,23 +70,46 @@ function AllRooms() {
   };
 
   const handleAddRoom = async () => {
-    const addResult = await addRoom(infoRoom);
+    const addResult = await addRoom({
+      ...infoRoom,
+      type,
+      service: serviceChoiceUser,
+    });
     if (addResult.saveRoom === undefined) {
       toast.error(addResult.message);
     } else {
       toast.success(addResult.message);
     }
+    setInfoRoom({
+      numRoom: null,
+      description: "",
+      image_1: "",
+      image_2: "",
+    });
+    setType(null);
     const results = await getAllRooms();
     setRooms(results);
     handleCloseDialog();
+  };
+
+  const handleDetailRoom = async (num) => {
+    const result = await getRoomByNumber(num);
+    return result;
   };
 
   const loadRooms = async () => {
     const result = await getAllRooms();
     setRooms(result);
   };
+
+  const loadService = async () => {
+    const result = await getAllServices();
+    setServices(result);
+  };
+
   useEffect(() => {
     loadRooms();
+    loadService();
   }, []);
 
   return (
@@ -104,6 +144,7 @@ function AllRooms() {
                   room={room}
                   key={index}
                   handleDeleteRoom={handleDeleteRoom}
+                  handleDetailRoom={handleDetailRoom}
                 />
               </div>
             ))}
@@ -171,16 +212,12 @@ function AllRooms() {
                   />
                 </FormControl>
 
-                <FormControl>
-                  <InputLabel htmlFor="type">Ảnh mô tả số 2</InputLabel>
-                  <Input
-                    id="type"
-                    aria-describedby="helper-name"
-                    name="type"
-                    value={infoRoom.type}
-                    onChange={(e) => handleOnChangeInfoRoom(e)}
-                  />
-                </FormControl>
+                <DropDown type={true} handleTypeChange={handleTypeChange} />
+                <DropDown
+                  isService={true}
+                  listService={services}
+                  handleChangeService={handleChangeService}
+                />
               </Box>
             </DialogContent>
             <DialogActions>
