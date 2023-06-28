@@ -75,10 +75,6 @@ function AllServices() {
     setServices(result);
   };
 
-  useEffect(() => {
-    loadService();
-  }, []);
-
   const handleOpenDialog = () => {
     setInfoService({
       name: "",
@@ -107,6 +103,10 @@ function AllServices() {
     setServices(result);
     handleCloseDialog();
   };
+
+  useEffect(() => {
+    loadService();
+  }, []);
 
   return (
     <>

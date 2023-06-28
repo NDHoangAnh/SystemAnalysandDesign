@@ -1,7 +1,5 @@
 import { Box, Button, Modal } from "@mui/material";
 import "./ModalDetail.css";
-import { getRoomByNumber } from "../apis";
-import { useEffect, useState } from "react";
 
 const style = {
   position: "absolute",

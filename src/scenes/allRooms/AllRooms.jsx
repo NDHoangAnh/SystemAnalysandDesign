@@ -5,12 +5,12 @@ import {
   addRoom,
   getAllServices,
   getRoomByNumber,
+  editRoom,
 } from "../../apis";
 import {
   Box,
   Button,
   FormControl,
-  FormHelperText,
   Input,
   InputLabel,
   Dialog,
@@ -97,6 +97,17 @@ function AllRooms() {
     return result;
   };
 
+  const handleEditRoom = async (num, data) => {
+    const result = await editRoom(num, data);
+    if (result.room === undefined) {
+      toast.warning(result.message);
+    } else {
+      toast.success(result.message);
+    }
+    const results = await getAllRooms();
+    setRooms(results);
+  };
+
   const loadRooms = async () => {
     const result = await getAllRooms();
     setRooms(result);
@@ -126,7 +137,7 @@ function AllRooms() {
         pauseOnHover
         theme="colored"
       />
-      {(user.role === "user" || user.role === "staff") && (
+      {/* {(user.role === "user" || user.role === "staff") && (
         <div className="list-room">
           {rooms.map((room, index) => (
             <div>
@@ -134,7 +145,7 @@ function AllRooms() {
             </div>
           ))}
         </div>
-      )}
+      )} */}
       {user.role === "admin" && (
         <>
           <div className="list-room">
@@ -143,8 +154,10 @@ function AllRooms() {
                 <Room
                   room={room}
                   key={index}
+                  listService={services}
                   handleDeleteRoom={handleDeleteRoom}
                   handleDetailRoom={handleDetailRoom}
+                  handleEditRoom={handleEditRoom}
                 />
               </div>
             ))}

@@ -89,9 +89,8 @@ export default function HomeAdmin() {
         <Tab label="Danh sách phòng" {...a11yProps(1)} />
         <Tab label="Danh sách dịch vụ" {...a11yProps(2)} />
         <Tab label="Danh sách đặt phòng" {...a11yProps(3)} />
-        <Tab label="Đặt phòng" {...a11yProps(4)} />
-        <Tab label="Đổi mật khẩu" {...a11yProps(5)} />
-        <Tab label="Thông tin cá nhân" {...a11yProps(6)} />
+        <Tab label="Đổi mật khẩu" {...a11yProps(4)} />
+        <Tab label="Thông tin cá nhân" {...a11yProps(5)} />
         <Tab
           label="Đăng xuất"
           {...a11yProps(7)}
@@ -111,12 +110,9 @@ export default function HomeAdmin() {
         <ListBooking />
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
         <ChangePass />
       </TabPanel>
-      <TabPanel value={value} index={6}>
+      <TabPanel value={value} index={5}>
         <User />
       </TabPanel>
     </Box>

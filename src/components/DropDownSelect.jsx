@@ -1,7 +1,6 @@
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
 import { useState } from "react";
 import {
   Checkbox,
@@ -29,6 +28,9 @@ export default function DropDown(props) {
     isService,
     listService,
     handleChangeService,
+    isEdit,
+    detailRoom,
+    handleOnChangeEditRoom,
   } = props;
 
   const [serviceChoice, setServiceChoice] = useState([]);
@@ -39,9 +41,10 @@ export default function DropDown(props) {
     const selectedServiceIds = selectedServices.map((service) => service._id);
     handleChangeService(selectedServiceIds);
   };
+
   return (
     <Box sx={{ minWidth: 120 }}>
-      {type && (
+      {type && !isEdit && (
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Loại phòng</InputLabel>
           <Select
@@ -56,7 +59,7 @@ export default function DropDown(props) {
           </Select>
         </FormControl>
       )}
-      {isService && (
+      {isService && !isEdit && (
         <FormControl fullWidth>
           <InputLabel id="demo-multiple-checkbox-label">Dịch vụ</InputLabel>
           <Select
@@ -75,6 +78,54 @@ export default function DropDown(props) {
               <MenuItem key={service._id} value={service}>
                 <Checkbox
                   checked={serviceChoice.some(
+                    (selectedService) => selectedService._id === service._id
+                  )}
+                />
+                <ListItemText primary={service.service_name} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
+
+      {isEdit && detailRoom && type && (
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Loại phòng</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="typeChoice"
+            value={detailRoom.type}
+            name="type"
+            onChange={(e) => handleOnChangeEditRoom(e)}
+          >
+            <MenuItem value={1}>Phòng bình dân</MenuItem>
+            <MenuItem value={2}>Phòng thương gia</MenuItem>
+            <MenuItem value={3}>Phòng VIP</MenuItem>
+          </Select>
+        </FormControl>
+      )}
+
+      {isService && isEdit && detailRoom && (
+        <FormControl fullWidth>
+          <InputLabel id="demo-multiple-checkbox-label">Dịch vụ</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={detailRoom.service}
+            name="service"
+            onChange={(e) => handleOnChangeEditRoom(e)}
+            input={<OutlinedInput label="Dịch vụ" />}
+            renderValue={(selected) =>
+              selected.map((service) => service.service_name).join(", ")
+            }
+            MenuProps={MenuProps}
+          >
+            {listService.map((service) => (
+              <MenuItem key={service._id} value={service}>
+                <Checkbox
+                  checked={detailRoom.service.some(
                     (selectedService) => selectedService._id === service._id
                   )}
                 />
