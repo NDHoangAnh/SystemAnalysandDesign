@@ -18,7 +18,7 @@ const style = {
 };
 
 const ModalDetail = (props) => {
-  const { open, handleClose, room } = props;
+  const { open, handleClose, room, booking } = props;
   return (
     <>
       {room && (
@@ -53,6 +53,23 @@ const ModalDetail = (props) => {
                 ))}
             </Box>
             <Button style={{ bottom: 0 }}>Đặt phòng</Button>
+          </Box>
+        </Modal>
+      )}
+      {booking && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Box className="user-booking">
+              Thông tin người đặt: {booking?.user?.username}
+            </Box>
+            <Box className="room-booking">
+              Phòng được đặt: {booking?.room?.numRoom}
+            </Box>
           </Box>
         </Modal>
       )}

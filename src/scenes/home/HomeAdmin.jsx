@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import AllStaffs from "../allStaffs/AllStaffs";
 import AllRooms from "../allRooms/AllRooms";
 import AllServices from "../allServices/AllServices";
-import ListBooking from "../listBooking/ListBooking";
+import ListBooking from "../listBooking/ListBookingAdmin";
 import ChangePass from "../changePassword/ChangePass";
 import { useNavigate } from "react-router-dom";
 import { route } from "../../configs/route";

@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { route } from "../../configs/route";
 import { useEffect, useState } from "react";
 import User from "../detailUser/User";
+import AllRooms from "../allRooms/AllRooms";
+import ListBookingUser from "../listBooking/ListBookingUser";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -81,9 +83,10 @@ export default function HomeUser() {
         aria-label="Vertical tabs example"
         sx={{ borderRight: 1, borderColor: "divider" }}
       >
-        <Tab label="Đặt phòng" {...a11yProps(0)} />
-        <Tab label="Đổi mật khẩu" {...a11yProps(1)} />
-        <Tab label="Thông tin cá nhân" {...a11yProps(2)} />
+        <Tab label="Danh sách phòng" {...a11yProps(0)} />
+        <Tab label="Danh sách đặt phòng" {...a11yProps(1)} />
+        <Tab label="Đổi mật khẩu" {...a11yProps(2)} />
+        <Tab label="Thông tin cá nhân" {...a11yProps(3)} />
         <Tab
           label="Đăng xuất"
           {...a11yProps(7)}
@@ -91,12 +94,15 @@ export default function HomeUser() {
         />
       </Tabs>
       <TabPanel value={value} index={0}>
-        Item Five
+        <AllRooms />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <ChangePass />
+        <ListBookingUser />
       </TabPanel>
       <TabPanel value={value} index={2}>
+        <ChangePass />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <User />
       </TabPanel>
     </Box>

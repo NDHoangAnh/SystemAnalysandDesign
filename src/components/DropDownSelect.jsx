@@ -31,6 +31,8 @@ export default function DropDown(props) {
     isEdit,
     detailRoom,
     handleOnChangeEditRoom,
+    booking,
+    handleUpdateBooking,
   } = props;
 
   const [serviceChoice, setServiceChoice] = useState([]);
@@ -132,6 +134,26 @@ export default function DropDown(props) {
                 <ListItemText primary={service.service_name} />
               </MenuItem>
             ))}
+          </Select>
+        </FormControl>
+      )}
+
+      {booking && (
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Loại phòng</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            label="typeChoice"
+            value={booking.status}
+            name="status"
+            onChange={handleUpdateBooking}
+          >
+            <MenuItem value={0}>Chờ xử lý</MenuItem>
+            <MenuItem value={1}>Từ chối</MenuItem>
+            <MenuItem value={2}>Đồng ý</MenuItem>
+            <MenuItem value={3}>Đã nhận phòng</MenuItem>
+            <MenuItem value={4}>Đã trả phòng</MenuItem>
           </Select>
         </FormControl>
       )}

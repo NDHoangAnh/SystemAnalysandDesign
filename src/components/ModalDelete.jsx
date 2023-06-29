@@ -17,28 +17,63 @@ const style = {
 };
 
 export default function ModalDelete(props) {
-  const { open, handleClose, room, handleDeleteRoom } = props;
+  const {
+    open,
+    handleClose,
+    room,
+    handleDeleteRoom,
+    booking,
+    handleDeleteBooking,
+  } = props;
   return (
-    <Modal
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Bạn có chắc chắn muốn xóa phòng số {`${room?.numRoom}`}
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <Button
-            color="warning"
-            variant="contained"
-            onClick={() => handleDeleteRoom(room?.numRoom)}
-          >
-            Delete
-          </Button>
-        </Typography>
-      </Box>
-    </Modal>
+    <>
+      {room && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Bạn có chắc chắn muốn xóa phòng số {`${room?.numRoom}`}
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Button
+                color="warning"
+                variant="contained"
+                onClick={() => handleDeleteRoom(room?.numRoom)}
+              >
+                Delete
+              </Button>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
+
+      {booking && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Bạn có chắc chắn muốn xóa yêu cầu này không?
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Button
+                color="warning"
+                variant="contained"
+                onClick={() => handleDeleteBooking(booking?._id)}
+              >
+                Delete
+              </Button>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
+    </>
   );
 }
