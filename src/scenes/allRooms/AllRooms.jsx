@@ -6,6 +6,7 @@ import {
   getAllServices,
   getRoomByNumber,
   editRoom,
+  booking,
 } from "../../apis";
 import {
   Box,
@@ -108,6 +109,18 @@ function AllRooms() {
     setRooms(results);
   };
 
+  const handleBooking = async (data) => {
+    const result = await booking(data);
+    if (result.saveBooking === undefined) {
+      toast.warning(result.message);
+    } else {
+      alert(
+        `Bạn đã đặt phòng này với tổng tiền là ${result.saveBooking.price} `
+      );
+      toast.success(result.message);
+    }
+  };
+
   const loadRooms = async () => {
     const result = await getAllRooms();
     setRooms(result);
@@ -137,15 +150,21 @@ function AllRooms() {
         pauseOnHover
         theme="colored"
       />
-      {/* {(user.role === "user" || user.role === "staff") && (
+      {(user.role === "user" || user.role === "staff") && (
         <div className="list-room">
           {rooms.map((room, index) => (
             <div>
-              <Room room={room} key={index} />
+              <Room
+                room={room}
+                key={index}
+                handleDetailRoom={handleDetailRoom}
+                listService={services}
+                handleBooking={handleBooking}
+              />
             </div>
           ))}
         </div>
-      )} */}
+      )}
       {user.role === "admin" && (
         <>
           <div className="list-room">

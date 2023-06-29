@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteUserBooking, getUserBooking } from "../../apis";
 import {
+  Box,
   Button,
   Paper,
   Table,
@@ -20,12 +21,12 @@ function ListBookingUser() {
 
   const [bookingUser, setBookingUser] = useState([]);
   const [chooseBooking, setChooseBooking] = useState();
+  const [message, setMessage] = useState("");
 
   const loadBookingUser = async () => {
     const result = await getUserBooking(user._id);
-    console.log(result);
     if (result.message !== undefined) {
-      toast.success(result.message);
+      setMessage(result.message);
     } else {
       setBookingUser(result);
     }
@@ -133,6 +134,8 @@ function ListBookingUser() {
           </TableContainer>
         </>
       )}
+
+      {bookingUser.length === 0 && <Box>{message}</Box>}
     </>
   );
 }
