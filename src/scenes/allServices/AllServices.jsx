@@ -122,9 +122,6 @@ function AllServices() {
         pauseOnHover
         theme="colored"
       />
-      {(user.role === "user" || user.role === "staff") && (
-        <div>Bạn không có quyền xem nội dung này</div>
-      )}
       {user.role === "admin" && (
         <div className="list-staff">
           <TableContainer component={Paper}>

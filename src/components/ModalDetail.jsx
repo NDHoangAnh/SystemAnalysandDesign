@@ -18,7 +18,8 @@ const style = {
 };
 
 const ModalDetail = (props) => {
-  const { open, handleClose, room, booking } = props;
+  const { open, handleClose, room, booking, userbooking } = props;
+  const serviceBooking = userbooking && userbooking.roomDetail.service;
   return (
     <>
       {room && (
@@ -70,6 +71,28 @@ const ModalDetail = (props) => {
             <Box className="room-booking">
               Phòng được đặt: {booking?.room?.numRoom}
             </Box>
+          </Box>
+        </Modal>
+      )}
+
+      {userbooking && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <Box className="room-detail-booking">
+              Thông tin phòng : {userbooking.roomDetail.numRoom}
+            </Box>
+            {serviceBooking.length > 0 &&
+              serviceBooking.map((service, index) => (
+                <Box key={index}>
+                  <Box>{service.service_name}</Box>
+                  <Box>{service.description}</Box>
+                </Box>
+              ))}
           </Box>
         </Modal>
       )}

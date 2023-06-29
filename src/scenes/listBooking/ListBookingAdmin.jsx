@@ -14,12 +14,13 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import ModalDetail from "../../components/ModalDetail";
 import ModalDelete from "../../components/ModalDelete";
 import DropDown from "../../components/DropDownSelect";
+import convertDate from "../../utils/convertDate";
 
 function ListBookingAdmin() {
   const [listBooking, setListBooking] = useState([]);
 
   const columns = [
-    { field: "id", headerName: "ID", width: 20 },
+    { field: "id", headerName: "ID", width: 30 },
     {
       field: "user.username",
       headerName: "Tên người đặt",
@@ -45,9 +46,7 @@ function ListBookingAdmin() {
       editable: true,
       valueGetter: (params) => {
         const date = new Date(params.row.startDate);
-        return `${date.getHours()} giờ : ${date.getMinutes()} ngày ${date.getDate()} - ${
-          date.getMonth() + 1
-        } - ${date.getFullYear()} `;
+        return convertDate(date);
       },
     },
     {
@@ -57,9 +56,7 @@ function ListBookingAdmin() {
       editable: true,
       valueGetter: (params) => {
         const date = new Date(params.row.endDate);
-        return `${date.getHours()} giờ : ${date.getMinutes()} ngày ${date.getDate()} - ${
-          date.getMonth() + 1
-        } - ${date.getFullYear()} `;
+        return convertDate(date);
       },
     },
     {
@@ -173,70 +170,72 @@ function ListBookingAdmin() {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      <ModalDetail
-        booking={detailBooking}
-        open={openModalDetail}
-        handleClose={closeModalDetail}
-      />
-      <ModalDelete
-        open={openModalDelete}
-        handleClose={closeModalDelete}
-        booking={detailBooking}
-        handleDeleteBooking={handleDeleteBookingAdmin}
-      />
+      {listBooking.length > 0 && (
+        <>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+          <ModalDetail
+            booking={detailBooking}
+            open={openModalDetail}
+            handleClose={closeModalDetail}
+          />
+          <ModalDelete
+            open={openModalDelete}
+            handleClose={closeModalDelete}
+            booking={detailBooking}
+            handleDeleteBooking={handleDeleteBookingAdmin}
+          />
 
-      <Dialog open={openDialogEdit} onClose={closeDialogEdit}>
-        <DialogTitle>Xử lý yêu cầu</DialogTitle>
-        <DialogContent>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              width: "25vw",
-              gap: "1rem",
-              marginTop: "1rem",
-            }}
-          >
-            <DropDown
-              booking={detailBooking}
-              handleUpdateBooking={handleOnChangeReq}
+          <Dialog open={openDialogEdit} onClose={closeDialogEdit}>
+            <DialogTitle>Xử lý yêu cầu</DialogTitle>
+            <DialogContent>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "25vw",
+                  gap: "1rem",
+                  marginTop: "1rem",
+                }}
+              >
+                <DropDown
+                  booking={detailBooking}
+                  handleUpdateBooking={handleOnChangeReq}
+                />
+              </Box>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={closeDialogEdit}>Hủy</Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleReqBooking()}
+              >
+                Xác nhận
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Box sx={{ width: "101%" }}>
+            <DataGrid
+              rows={row}
+              columns={columns}
+              pageSizeOptions={[10]}
+              slots={{ toolbar: GridToolbar }}
+              // checkboxSelection
             />
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDialogEdit}>Hủy</Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleReqBooking()}
-          >
-            Xác nhận
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {listBooking.length > 0 && (
-        <Box sx={{ width: "101%" }}>
-          <DataGrid
-            rows={row}
-            columns={columns}
-            pageSizeOptions={[10]}
-            slots={{ toolbar: GridToolbar }}
-            // checkboxSelection
-          />
-        </Box>
+        </>
       )}
     </>
   );
