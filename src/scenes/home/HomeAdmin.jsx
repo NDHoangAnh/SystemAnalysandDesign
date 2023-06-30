@@ -48,6 +48,7 @@ function a11yProps(index) {
 }
 
 export default function HomeAdmin() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
 
@@ -61,60 +62,64 @@ export default function HomeAdmin() {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("user")) {
+    if (user === undefined || user === null) {
       navigate(route.HOME);
     }
   }, []);
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        bgcolor: "background.paper",
-        display: "flex",
-        height: "100vh",
-        padding: "10px 10px",
-        backgroundColor: "",
-      }}
-    >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        <Tab label="Danh sách nhân viên" {...a11yProps(0)} />
-        <Tab label="Danh sách phòng" {...a11yProps(1)} />
-        <Tab label="Danh sách dịch vụ" {...a11yProps(2)} />
-        <Tab label="Danh sách đặt phòng" {...a11yProps(3)} />
-        <Tab label="Đổi mật khẩu" {...a11yProps(4)} />
-        <Tab label="Thông tin cá nhân" {...a11yProps(5)} />
-        <Tab
-          label="Đăng xuất"
-          {...a11yProps(7)}
-          onClick={() => hanleLogout()}
-        />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <AllStaffs />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <AllRooms />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <AllServices />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <ListBooking />
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        <ChangePass />
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        <User />
-      </TabPanel>
-    </Box>
+    <>
+      {user && (
+        <Box
+          sx={{
+            flexGrow: 1,
+            bgcolor: "background.paper",
+            display: "flex",
+            height: "100vh",
+            padding: "10px 10px",
+            backgroundColor: "",
+          }}
+        >
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            sx={{ borderRight: 1, borderColor: "divider" }}
+          >
+            <Tab label="Danh sách nhân viên" {...a11yProps(0)} />
+            <Tab label="Danh sách phòng" {...a11yProps(1)} />
+            <Tab label="Danh sách dịch vụ" {...a11yProps(2)} />
+            <Tab label="Danh sách đặt phòng" {...a11yProps(3)} />
+            <Tab label="Đổi mật khẩu" {...a11yProps(4)} />
+            <Tab label="Thông tin cá nhân" {...a11yProps(5)} />
+            <Tab
+              label="Đăng xuất"
+              {...a11yProps(7)}
+              onClick={() => hanleLogout()}
+            />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <AllStaffs />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <AllRooms />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <AllServices />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <ListBooking />
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <ChangePass />
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <User />
+          </TabPanel>
+        </Box>
+      )}
+    </>
   );
 }

@@ -130,7 +130,6 @@ export const deleteStaff = async (email) => {
 export const login = async (data) => {
   try {
     const result = await axios.post(`${DOMAIN}/login`, data);
-    console.log(result.data);
     return result.data;
   } catch (error) {
     console.log(error);

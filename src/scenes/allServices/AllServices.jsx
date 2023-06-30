@@ -128,7 +128,7 @@ function AllServices() {
         pauseOnHover
         theme="colored"
       />
-      {user.role === "admin" && (
+      {user.role !== "user" && (
         <div className="list-staff">
           <Box sx={{ mb: 2 }}>
             <FormControl fullWidth>
@@ -148,9 +148,11 @@ function AllServices() {
                   <TableCell>Tên dịch vụ</TableCell>
                   <TableCell>Mô tả</TableCell>
                   <TableCell>Số điện thoại</TableCell>
-                  <TableCell align="center" colSpan={2}>
-                    Action
-                  </TableCell>
+                  {user.role === "admin" && (
+                    <TableCell align="center" colSpan={2}>
+                      Action
+                    </TableCell>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -162,26 +164,30 @@ function AllServices() {
                     <TableCell>{service.service_name}</TableCell>
                     <TableCell>{service.description}</TableCell>
                     <TableCell>{service.phone}</TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        color="warning"
-                        onClick={() => handleShowDialogEdit(service)}
-                      >
-                        Sửa
-                      </Button>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Button
-                        variant="contained"
-                        color="error"
-                        onClick={() =>
-                          handleDeleteService(service.service_name)
-                        }
-                      >
-                        Xóa
-                      </Button>
-                    </TableCell>
+                    {user.role === "admin" && (
+                      <>
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={() => handleShowDialogEdit(service)}
+                          >
+                            Sửa
+                          </Button>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() =>
+                              handleDeleteService(service.service_name)
+                            }
+                          >
+                            Xóa
+                          </Button>
+                        </TableCell>
+                      </>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

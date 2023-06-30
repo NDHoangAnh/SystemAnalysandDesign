@@ -18,6 +18,7 @@ import convertDate from "../../utils/convertDate";
 
 function ListBookingAdmin() {
   const [listBooking, setListBooking] = useState([]);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const columns = [
     { field: "id", headerName: "ID", width: 30 },
@@ -86,7 +87,9 @@ function ListBookingAdmin() {
       renderCell: (params) => (
         <Box>
           <Button onClick={() => handleEdit(params.row._id)}>Cập nhật</Button>
-          <Button onClick={() => handleDelete(params.row._id)}>Xóa</Button>
+          {user.role === "admin" && (
+            <Button onClick={() => handleDelete(params.row._id)}>Xóa</Button>
+          )}
           <Button onClick={() => handleDetail(params.row._id)}>Chi tiết</Button>
         </Box>
       ),

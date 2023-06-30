@@ -26,6 +26,7 @@ export default function Room({
   listService,
   handleEditRoom,
   handleBooking,
+  homepage,
 }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const [detailRoom, setDetailRoom] = useState();
@@ -51,8 +52,29 @@ export default function Room({
 
   const handleOnChangeEditRoom = (e) => {
     setDetailRoom({ ...detailRoom, [e.target.name]: e.target.value });
-    console.log(detailRoom);
+    // console.log(detailRoom);
   };
+
+  // const handleOnChangeEditRoom = (e) => {
+  //   const { name, value } = e.target;
+
+  //   if (name === "service") {
+  //     const selectedServiceIds = Array.isArray(value) ? value : [value];
+  //     const selectedServices = listService.filter((service) =>
+  //       selectedServiceIds.includes(service._id)
+  //     );
+
+  //     setDetailRoom((prevDetailRoom) => ({
+  //       ...prevDetailRoom,
+  //       service: selectedServices,
+  //     }));
+  //   } else {
+  //     setDetailRoom((prevDetailRoom) => ({
+  //       ...prevDetailRoom,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
 
   const _handleEditRoom = async (num, data) => {
     await handleEditRoom(num, data);
@@ -69,7 +91,9 @@ export default function Room({
       : "Phòng Vip";
 
   useEffect(() => {
-    loadDetailRoom();
+    if (user) {
+      loadDetailRoom();
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -188,7 +212,7 @@ export default function Room({
             <CardActions>
               {user.role === "admin" && (
                 <>
-                  <Button size="small" onClick={() => handleOpenDialogEdit()}>
+                  <Button size="small" onClick={handleOpenDialogEdit}>
                     Sửa
                   </Button>
                   <Button size="small" onClick={handleOpenModalDelete}>
@@ -202,6 +226,30 @@ export default function Room({
             </CardActions>
           </Card>
         </>
+      )}
+      {homepage && room && (
+        <Card
+          sx={{
+            maxWidth: 345,
+            padding: "10px",
+            maxHeight: 400,
+            marginBottom: "30px",
+            display: "inline-block",
+          }}
+        >
+          <CardMedia
+            sx={{ height: "200px", objectFit: "contain", width: "350px" }}
+            image={room?.image_1}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {`Phòng số ${room.numRoom}`}
+              <Typography variant="body1" color="text.secondary">
+                {typeRoom}
+              </Typography>
+            </Typography>
+          </CardContent>
+        </Card>
       )}
     </>
   );

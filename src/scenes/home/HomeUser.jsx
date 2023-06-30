@@ -46,6 +46,7 @@ function a11yProps(index) {
 }
 
 export default function HomeUser() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
 
@@ -59,52 +60,56 @@ export default function HomeUser() {
   };
 
   useEffect(() => {
-    if (!localStorage.getItem("user")) {
+    if (user === null || user === undefined) {
       navigate(route.HOME);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        bgcolor: "background.paper",
-        display: "flex",
-        padding: "10px 10px",
-        backgroundColor: "",
-        height: "100vh",
-      }}
-    >
-      <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
-        aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
-      >
-        <Tab label="Danh sách phòng" {...a11yProps(0)} />
-        <Tab label="Danh sách đặt phòng" {...a11yProps(1)} />
-        <Tab label="Đổi mật khẩu" {...a11yProps(2)} />
-        <Tab label="Thông tin cá nhân" {...a11yProps(3)} />
-        <Tab
-          label="Đăng xuất"
-          {...a11yProps(7)}
-          onClick={() => hanleLogout()}
-        />
-      </Tabs>
-      <TabPanel value={value} index={0}>
-        <AllRooms />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <ListBookingUser />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <ChangePass />
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        <User />
-      </TabPanel>
-    </Box>
+    <>
+      {user && (
+        <Box
+          sx={{
+            flexGrow: 1,
+            bgcolor: "background.paper",
+            display: "flex",
+            padding: "10px 10px",
+            backgroundColor: "",
+            height: "100vh",
+          }}
+        >
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            sx={{ borderRight: 1, borderColor: "divider" }}
+          >
+            <Tab label="Danh sách phòng" {...a11yProps(0)} />
+            <Tab label="Danh sách đặt phòng" {...a11yProps(1)} />
+            <Tab label="Đổi mật khẩu" {...a11yProps(2)} />
+            <Tab label="Thông tin cá nhân" {...a11yProps(3)} />
+            <Tab
+              label="Đăng xuất"
+              {...a11yProps(7)}
+              onClick={() => hanleLogout()}
+            />
+          </Tabs>
+          <TabPanel value={value} index={0}>
+            <AllRooms />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <ListBookingUser />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <ChangePass />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <User />
+          </TabPanel>
+        </Box>
+      )}
+    </>
   );
 }

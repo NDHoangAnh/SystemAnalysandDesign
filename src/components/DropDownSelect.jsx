@@ -116,8 +116,9 @@ export default function DropDown(props) {
             id="demo-multiple-checkbox"
             multiple
             value={detailRoom.service}
+            // value={detailRoom.service.map((_service) => _service._id)}
             name="service"
-            onChange={(e) => handleOnChangeEditRoom(e)}
+            onChange={handleOnChangeEditRoom}
             input={<OutlinedInput label="Dịch vụ" />}
             renderValue={(selected) =>
               selected.map((service) => service.service_name).join(", ")

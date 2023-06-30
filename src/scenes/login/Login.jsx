@@ -45,7 +45,6 @@ const Login = () => {
     let check = validateFormLogin();
     if (check) {
       const { password, email } = user;
-      console.log(user);
       const data = await login({ email, password });
       if (data.user === undefined || data.user === null) {
         toast.error(data.message);

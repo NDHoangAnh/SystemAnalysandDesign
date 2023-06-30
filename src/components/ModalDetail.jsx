@@ -47,8 +47,6 @@ const ModalDetail = (props) => {
   const showForm = () => setOpenFormBooking(true);
   const closeForm = () => setOpenFormBooking(false);
 
-  console.log(room);
-
   const [bookingData, setBookingData] = useState({
     user_id: user._id,
     room_id: room && room._id,
@@ -66,12 +64,6 @@ const ModalDetail = (props) => {
   const [start_date, setStartDate] = useState(null);
   const [end_date, setEndDate] = useState(null);
   const [date_of_birth, setDateOfBirth] = useState(null);
-
-  // const onChangeStartDate = (_date) => {
-  //   const date = new Date(_date);
-  //   const formattedDate = date.toISOString();
-  //   setStartDate(formattedDate);
-  // };
 
   const onChangeStartDate = (_date) => {
     if (!_date) {

@@ -29,7 +29,7 @@ import Room from "../../containers/room/Room";
 import "./AllRooms.css";
 import DropDown from "../../components/DropDownSelect";
 
-function AllRooms() {
+function AllRooms({ homepage }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [rooms, setRooms] = useState([]);
@@ -47,7 +47,7 @@ function AllRooms() {
     setType(_type);
   };
 
-  const [serviceChoiceUser, setServiceChoiceUser] = useState(null);
+  const [serviceChoiceUser, setServiceChoiceUser] = useState([]);
   const handleChangeService = (_service) => {
     setServiceChoiceUser(_service);
   };
@@ -93,7 +93,7 @@ function AllRooms() {
       image_2: "",
     });
     setType(null);
-    setServiceChoiceUser(null);
+    setServiceChoiceUser([]);
     const results = await getAllRooms();
     setRooms(results);
     setLoading(false);

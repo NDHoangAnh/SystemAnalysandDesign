@@ -1,7 +1,9 @@
 export const route = {
-  HOME: "/",
+  HOME: "/home",
   LOGIN: "/login",
   REGISTER: "/register",
-  HOMEPAGE: "/home",
+  HOMEPAGE: "/",
   STAFF: "/staff",
+  ADMIN: "/home-admin",
+  USER: "/home-user",
 };
