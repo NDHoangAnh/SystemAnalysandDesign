@@ -12,6 +12,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import ModalDetail from "../../components/ModalDetail";
 import convertDate from "../../utils/convertDate";
@@ -22,14 +24,17 @@ function ListBookingUser() {
   const [bookingUser, setBookingUser] = useState([]);
   const [chooseBooking, setChooseBooking] = useState();
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const loadBookingUser = async () => {
+    setLoading(true); // Set loading state to true before fetching data
     const result = await getUserBooking(user._id);
     if (result.message !== undefined) {
       setMessage(result.message);
     } else {
       setBookingUser(result);
     }
+    setLoading(false); // Set loading state to false after data is fetched
   };
 
   // detail
@@ -51,10 +56,17 @@ function ListBookingUser() {
 
   useEffect(() => {
     loadBookingUser();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
       {bookingUser.length > 0 && (
         <>
           <ToastContainer

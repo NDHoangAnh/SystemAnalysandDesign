@@ -19,6 +19,8 @@ import {
   DialogContent,
   DialogActions,
   Fab,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
@@ -32,7 +34,7 @@ function AllRooms() {
 
   const [rooms, setRooms] = useState([]);
   const [services, setServices] = useState([]);
-
+  const [loading, setLoading] = useState(false);
   const [infoRoom, setInfoRoom] = useState({
     numRoom: null,
     description: "",
@@ -64,13 +66,16 @@ function AllRooms() {
   };
 
   const handleDeleteRoom = async (num) => {
+    setLoading(true);
     const deleteResult = await deleteRoom(num);
     toast.success(deleteResult.message);
     const result = await getAllRooms();
     setRooms(result);
+    setLoading(false);
   };
 
   const handleAddRoom = async () => {
+    setLoading(true);
     const addResult = await addRoom({
       ...infoRoom,
       type,
@@ -88,8 +93,10 @@ function AllRooms() {
       image_2: "",
     });
     setType(null);
+    setServiceChoiceUser(null);
     const results = await getAllRooms();
     setRooms(results);
+    setLoading(false);
     handleCloseDialog();
   };
 
@@ -99,6 +106,7 @@ function AllRooms() {
   };
 
   const handleEditRoom = async (num, data) => {
+    setLoading(true);
     const result = await editRoom(num, data);
     if (result.room === undefined) {
       toast.warning(result.message);
@@ -107,9 +115,11 @@ function AllRooms() {
     }
     const results = await getAllRooms();
     setRooms(results);
+    setLoading(false);
   };
 
   const handleBooking = async (data) => {
+    setLoading(true);
     const result = await booking(data);
     if (result.saveBooking === undefined) {
       toast.warning(result.message);
@@ -119,16 +129,21 @@ function AllRooms() {
       );
       toast.success(result.message);
     }
+    setLoading(false);
   };
 
   const loadRooms = async () => {
+    setLoading(true);
     const result = await getAllRooms();
     setRooms(result);
+    setLoading(false);
   };
 
   const loadService = async () => {
+    setLoading(true);
     const result = await getAllServices();
     setServices(result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -138,6 +153,12 @@ function AllRooms() {
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -169,7 +190,7 @@ function AllRooms() {
         <>
           <div className="list-room">
             {rooms.map((room, index) => (
-              <div>
+              <div className="test" sx={{ height: "100px" }}>
                 <Room
                   room={room}
                   key={index}

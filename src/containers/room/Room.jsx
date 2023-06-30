@@ -51,6 +51,7 @@ export default function Room({
 
   const handleOnChangeEditRoom = (e) => {
     setDetailRoom({ ...detailRoom, [e.target.name]: e.target.value });
+    console.log(detailRoom);
   };
 
   const _handleEditRoom = async (num, data) => {
@@ -69,7 +70,7 @@ export default function Room({
 
   useEffect(() => {
     loadDetailRoom();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -163,7 +164,15 @@ export default function Room({
             </DialogActions>
           </Dialog>
 
-          <Card sx={{ maxWidth: 345, padding: "10px" }}>
+          <Card
+            sx={{
+              maxWidth: 345,
+              padding: "10px",
+              maxHeight: 400,
+              marginBottom: "30px",
+              display: "inline-block",
+            }}
+          >
             <CardMedia
               sx={{ height: "200px", objectFit: "contain", width: "350px" }}
               image={room?.image_1}
@@ -174,9 +183,6 @@ export default function Room({
                 <Typography variant="body1" color="text.secondary">
                   {typeRoom}
                 </Typography>
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {room.description}
               </Typography>
             </CardContent>
             <CardActions>

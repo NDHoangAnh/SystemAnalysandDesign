@@ -37,9 +37,8 @@ function AllServices() {
   });
 
   const [openDialog, setOpenDialog] = useState(false);
-
-  // edit
   const [openDialogEdit, setOpenDialogEdit] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleShowDialogEdit = (data) => {
     setInfoService({
@@ -63,7 +62,6 @@ function AllServices() {
     setServices(result);
     handleCloseDialogEdit();
   };
-  //
 
   const handleOnChangeInputService = (e) => {
     setInfoService({ ...infoService, [e.target.name]: e.target.value });
@@ -104,6 +102,14 @@ function AllServices() {
     handleCloseDialog();
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredServices = services.filter((service) =>
+    service.service_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   useEffect(() => {
     loadService();
   }, []);
@@ -124,6 +130,17 @@ function AllServices() {
       />
       {user.role === "admin" && (
         <div className="list-staff">
+          <Box sx={{ mb: 2 }}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="search">Search</InputLabel>
+              <Input
+                id="search"
+                name="search"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </FormControl>
+          </Box>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
@@ -137,7 +154,7 @@ function AllServices() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {services.map((service, index) => (
+                {filteredServices.map((service, index) => (
                   <TableRow
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

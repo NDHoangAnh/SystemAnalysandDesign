@@ -31,6 +31,7 @@ function AllStaffs() {
     phone: "",
   });
   const [openDialog, setOpenDialog] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleOnChangeInputStaff = (e) => {
     setInfoStaff({ ...infoStaff, [e.target.name]: e.target.value });
@@ -75,6 +76,14 @@ function AllStaffs() {
     handleCloseDialog();
   };
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const filteredStaffs = staffs.filter((staff) =>
+    staff.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <>
       <ToastContainer
@@ -94,7 +103,21 @@ function AllStaffs() {
       )}
       {user.role === "admin" && (
         <div className="list-staff">
-          <TableContainer component={Paper}>
+          <div
+            className="search-bar"
+            style={{ position: "fixed", top: 16, right: 16 }}
+          >
+            <FormControl>
+              <InputLabel htmlFor="search">Search by Username</InputLabel>
+              <Input
+                id="search"
+                aria-describedby="helper-search"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+            </FormControl>
+          </div>
+          <TableContainer component={Paper} sx={{ mt: 8 }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -105,7 +128,7 @@ function AllStaffs() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {staffs.map((staff, index) => (
+                {filteredStaffs.map((staff, index) => (
                   <TableRow
                     key={index}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
