@@ -27,13 +27,13 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "70vw",
-  height: "fit-content",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   display: "flex",
   flexDirection: "column",
+  height: "85vh",
   // alignItems: "center",
 };
 
@@ -142,7 +142,7 @@ const ModalDetail = (props) => {
             <Box sx={style}>
               <Box
                 className="image-room"
-                sx={{ width: "50vw", height: "20vh", ml: "15%" }}
+                sx={{ width: "20vw", height: "auto", ml: "15%" }}
               >
                 <img
                   className="image-room-detail"
@@ -155,13 +155,19 @@ const ModalDetail = (props) => {
                   alt="demo-2"
                 />
               </Box>
+              <Typography variant="h4" sx={{ mt: 2 }}>
+                Phòng số {room.numRoom}
+              </Typography>
               <Box
                 className="info-room"
-                sx={{ mb: 3, mt: 3, maxHeight: 250, overflowY: "auto" }}
+                sx={{
+                  mb: 3,
+                  mt: 3,
+                  maxHeight: 350,
+                  overflowY: "auto",
+                  width: "100%",
+                }}
               >
-                <Typography variant="h4" sx={{ mb: 2 }}>
-                  Phòng số {room.numRoom}
-                </Typography>
                 <Typography variant="h6">{room.description}</Typography>
               </Box>
               <Typography variant="h6">Dịch vụ</Typography>

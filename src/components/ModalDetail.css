@@ -1,5 +1,13 @@
 .image-room {
-  height: 30% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-room img {
+  width: 100%;
+  height: auto;
+  margin-left: 28vw;
 }
 
 .image-room-detail {
