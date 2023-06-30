@@ -9,6 +9,8 @@ import {
   Input,
   InputLabel,
   Modal,
+  Typography,
+  Divider,
 } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -32,7 +34,7 @@ const style = {
   p: 4,
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
+  // alignItems: "center",
 };
 
 const ModalDetail = (props) => {
@@ -140,7 +142,7 @@ const ModalDetail = (props) => {
             <Box sx={style}>
               <Box
                 className="image-room"
-                sx={{ width: "50vw", height: "20vh" }}
+                sx={{ width: "50vw", height: "20vh", ml: "15%" }}
               >
                 <img
                   className="image-room-detail"
@@ -153,15 +155,33 @@ const ModalDetail = (props) => {
                   alt="demo-2"
                 />
               </Box>
-              <Box className="info-room">{room.description}</Box>
-              <Box className="service-room">
+              <Box
+                className="info-room"
+                sx={{ mb: 3, mt: 3, maxHeight: 250, overflowY: "auto" }}
+              >
+                <Typography variant="h4" sx={{ mb: 2 }}>
+                  Phòng số {room.numRoom}
+                </Typography>
+                <Typography variant="h6">{room.description}</Typography>
+              </Box>
+              <Typography variant="h6">Dịch vụ</Typography>
+              <Divider />
+              <Box
+                className="service-room"
+                sx={{ maxHeight: 250, overflowY: "auto" }}
+              >
                 {room.service.length !== 0 &&
                   room.service.map((_service, index) => (
-                    <Box key={index}>
-                      <Box>{_service?.service_name}</Box>
-                      <Box>{_service?.description}</Box>
-                      <Box>{_service?.phone}</Box>
-                    </Box>
+                    <div>
+                      <Box key={index} sx={{ mb: 1, mt: 1 }}>
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {_service?.service_name}
+                        </Typography>
+                        <Typography>{_service?.description}</Typography>
+                        <Typography>Contact: {_service?.phone}</Typography>
+                      </Box>
+                      <Divider />
+                    </div>
                   ))}
               </Box>
               {user.role === "user" && (
@@ -172,7 +192,9 @@ const ModalDetail = (props) => {
             </Box>
           </Modal>
           <Dialog open={openFormBooking} onClose={closeForm}>
-            <DialogTitle>Add Service</DialogTitle>
+            <DialogTitle variant="h4" sx={{ textAlign: "center" }}>
+              Đặt phòng
+            </DialogTitle>
             <DialogContent>
               <Box
                 sx={{
@@ -191,6 +213,7 @@ const ModalDetail = (props) => {
                     name="slot"
                     value={bookingData.slot}
                     onChange={onChangeBookingData}
+                    fullWidth
                   />
                 </FormControl>
 
@@ -204,6 +227,7 @@ const ModalDetail = (props) => {
                     name="phone_number"
                     value={bookingData.phone_number}
                     onChange={onChangeBookingData}
+                    fullWidth
                   />
                 </FormControl>
 
@@ -215,6 +239,7 @@ const ModalDetail = (props) => {
                     name="fullName"
                     value={bookingData.fullName}
                     onChange={onChangeBookingData}
+                    fullWidth
                   />
                 </FormControl>
 
@@ -223,6 +248,7 @@ const ModalDetail = (props) => {
                     <DatePicker
                       label="Chọn ngày tháng năm sinh"
                       onChange={onChangeDateOfBirth}
+                      sx={{ width: "100vh" }}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
@@ -269,13 +295,13 @@ const ModalDetail = (props) => {
               </Box>
             </DialogContent>
             <DialogActions>
-              <Button onClick={closeForm}>Cancel</Button>
+              <Button onClick={closeForm}>Hủy</Button>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => _handleBooking()}
               >
-                Submit
+                Xác nhận
               </Button>
             </DialogActions>
           </Dialog>

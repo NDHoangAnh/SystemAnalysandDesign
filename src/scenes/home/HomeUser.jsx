@@ -62,7 +62,7 @@ export default function HomeUser() {
     if (!localStorage.getItem("user")) {
       navigate(route.HOME);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box
@@ -70,9 +70,9 @@ export default function HomeUser() {
         flexGrow: 1,
         bgcolor: "background.paper",
         display: "flex",
-        height: "100vh",
         padding: "10px 10px",
         backgroundColor: "",
+        height: "100vh",
       }}
     >
       <Tabs
