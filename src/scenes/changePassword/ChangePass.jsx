@@ -1,11 +1,21 @@
 import React, { useState } from "react";
-import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Avatar,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { changePassword } from "../../apis";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 function ChangePass() {
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const [loading, setLoading] = useState(false);
   const [infoToChange, setInfoToChange] = useState({
     old_pass: "",
     new_pass: "",
@@ -16,12 +26,14 @@ function ChangePass() {
   };
 
   const changePass = async () => {
+    setLoading(true);
     const result = await changePassword({ ...infoToChange, email: user.email });
     if (result.message === "Cập nhật mật khẩu thành công") {
       toast.success(result.message);
     } else {
       toast.warning(result.message);
     }
+    setLoading(false);
     setInfoToChange({
       old_pass: "",
       new_pass: "",
@@ -32,16 +44,35 @@ function ChangePass() {
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "25vw",
+          width: "80vw",
           gap: "1rem",
-          marginTop: "1rem",
+          marginTop: "10vh",
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
-        <FormControl>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ width: 56, height: 56 }}>
+            <LockOpenIcon />
+          </Avatar>
+        </div>
+        <FormControl sx={{ mb: 2 }}>
           <InputLabel htmlFor="old_pass">Nhập mật khẩu hiện tại</InputLabel>
           <Input
             id="old_pass"
@@ -53,7 +84,7 @@ function ChangePass() {
           />
         </FormControl>
 
-        <FormControl>
+        <FormControl sx={{ mb: 2 }}>
           <InputLabel htmlFor="new_pass">Nhập mật khẩu mới</InputLabel>
           <Input
             id="new_pass"
@@ -65,7 +96,7 @@ function ChangePass() {
           />
         </FormControl>
 
-        <FormControl>
+        <FormControl sx={{ mb: 2 }}>
           <InputLabel htmlFor="confirm_pass">Xác nhận mật khẩu mới</InputLabel>
           <Input
             id="confirm_pass"

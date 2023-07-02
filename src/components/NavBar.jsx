@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { route } from "../configs/route";
 
 export default function NavBar() {
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const login = () => {
     navigate(route.LOGIN);
@@ -22,12 +23,16 @@ export default function NavBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Hotel
           </Typography>
-          <Button color="inherit" onClick={() => login()}>
-            Đăng nhập
-          </Button>
-          <Button color="inherit" onClick={() => register()}>
-            Đăng ký
-          </Button>
+          {(user === undefined || user === null) && (
+            <>
+              <Button color="inherit" onClick={() => login()}>
+                Đăng nhập
+              </Button>
+              <Button color="inherit" onClick={() => register()}>
+                Đăng ký
+              </Button>
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

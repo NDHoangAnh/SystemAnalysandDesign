@@ -121,6 +121,23 @@ const ModalDetail = (props) => {
     closeForm();
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear() % 100;
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    return `${padNumber(day)}/${padNumber(month)}/${padNumber(
+      year
+    )} ${padNumber(hours)}:${padNumber(minutes)}`;
+  };
+
+  const padNumber = (number) => {
+    return number.toString().padStart(2, "0");
+  };
+
   return (
     <>
       {room && (
@@ -132,10 +149,7 @@ const ModalDetail = (props) => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <Box
-                className="image-room"
-                sx={{ width: "20vw", height: "auto", ml: "15%" }}
-              >
+              <Box className="image-room" sx={{ width: "20vw", ml: "35%" }}>
                 <img
                   className="image-room-detail"
                   src={room.image_1}
@@ -155,12 +169,10 @@ const ModalDetail = (props) => {
                 sx={{
                   mb: 3,
                   mt: 3,
-                  maxHeight: 350,
-                  overflowY: "auto",
                   width: "100%",
                 }}
               >
-                <Typography variant="h6">{room.description}</Typography>
+                <Typography variant="subtitle2">{room.description}</Typography>
               </Box>
               <Typography variant="h6">Dịch vụ</Typography>
               <Divider />
@@ -332,16 +344,43 @@ const ModalDetail = (props) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Box className="room-detail-booking">
-              Thông tin phòng : {userbooking.roomDetail.numRoom}
+            <Box className="room-detail-booking" sx={{ mb: 2 }}>
+              <Typography sx={{ fontWeight: "bold" }} variant="h5">
+                Phòng số: {userbooking.roomDetail.numRoom}
+              </Typography>
+              <Typography variant="subtitle2">
+                {userbooking.roomDetail.description}
+              </Typography>
             </Box>
-            {serviceBooking.length > 0 &&
-              serviceBooking.map((service, index) => (
-                <Box key={index}>
-                  <Box>{service.service_name}</Box>
-                  <Box>{service.description}</Box>
-                </Box>
-              ))}
+            <Divider />
+            <Box sx={{ mb: 2, mt: 2 }}>
+              <Typography variant="h6">Số người: {userbooking.slot}</Typography>
+              <Typography variant="h6">Giá: {userbooking.price}</Typography>
+              <Typography variant="h6">
+                Thời gian bắt đầu: {formatDate(userbooking.startDate)}
+              </Typography>
+              <Typography variant="h6">
+                Thời gian kết thúc: {formatDate(userbooking.endDate)}
+              </Typography>
+            </Box>
+            <Divider />
+            <Typography sx={{ mt: 2 }} variant="h5">
+              Dịch vụ kèm
+            </Typography>
+            <Box sx={{ overflowY: "auto" }}>
+              {serviceBooking.length > 0 &&
+                serviceBooking.map((service, index) => (
+                  <Box key={index}>
+                    <Typography variant="h6">
+                      {"> "}
+                      {service.service_name}
+                    </Typography>
+                    <Typography variant="subtitle2" color="gray">
+                      {service.description}
+                    </Typography>
+                  </Box>
+                ))}
+            </Box>
           </Box>
         </Modal>
       )}

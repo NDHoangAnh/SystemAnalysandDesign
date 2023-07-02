@@ -90,6 +90,8 @@ export default function Room({
       ? "Phòng thương gia"
       : "Phòng Vip";
 
+  const cost = room.type === 1 ? 100 : room.type === 2 ? 150 : 200;
+
   useEffect(() => {
     if (user) {
       loadDetailRoom();
@@ -192,6 +194,7 @@ export default function Room({
             sx={{
               maxWidth: 345,
               padding: "10px",
+              marginLeft: "30px",
               maxHeight: 400,
               marginBottom: "30px",
               display: "inline-block",
@@ -206,6 +209,9 @@ export default function Room({
                 {`Phòng số ${room.numRoom}`}
                 <Typography variant="body1" color="text.secondary">
                   {typeRoom}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  Giá: {cost} / người
                 </Typography>
               </Typography>
             </CardContent>

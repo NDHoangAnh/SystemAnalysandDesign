@@ -22,11 +22,11 @@ function HomePage() {
     } else if (user.role === "user") {
       navigate(route.USER);
     } else navigate(route.ADMIN);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <NavBar />
-      <Box sx={{ ml: "2%" }}>
+      <Box sx={{ ml: "2%", mt: "3%" }}>
         {listRoom.length > 0 &&
           listRoom.map((room, index) => (
             <Room homepage={true} room={room} key={index} />

@@ -1,14 +1,29 @@
 import { useState } from "react";
-import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Avatar,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { editUser } from "../../apis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker } from "@mui/x-date-pickers";
 function User() {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState({
     email: user.email,
     phone: user.phone_number,
     username: user.username,
+    // address: user.address ? user.address : "",
   });
 
   const handleOnChange = (e) => {
@@ -16,22 +31,40 @@ function User() {
   };
 
   const handleEditUser = async () => {
+    setLoading(true);
     const res = await editUser(userInfo);
     toast.success(res.message);
+    setLoading(false);
     localStorage.setItem("user", JSON.stringify(res.user));
   };
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "50vw",
-          gap: "50px",
+          width: "80vw",
+          gap: "1rem",
           margin: "0 auto",
+          marginTop: "10vh",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ width: 56, height: 56 }}></Avatar>
+        </div>
         <FormControl>
           <InputLabel htmlFor="name">Email</InputLabel>
           <Input
@@ -64,6 +97,29 @@ function User() {
             onChange={(e) => handleOnChange(e)}
           />
         </FormControl>
+
+        <FormControl>
+          <InputLabel htmlFor="phone">Địa chỉ</InputLabel>
+          <Input
+            id="address"
+            aria-describedby="helper-name"
+            name="address"
+            value={userInfo.address ? userInfo.address : ""}
+            onChange={(e) => handleOnChange(e)}
+          />
+        </FormControl>
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={["DatePicker"]}>
+            <DatePicker
+              id="date_of_birth"
+              name="date_of_birth"
+              label="Ngày tháng năm sinh"
+              sx={{ width: "100vw" }}
+              onChange={(e) => handleOnChange(e)}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
 
         <Button
           variant="contained"

@@ -6,4 +6,5 @@ export const route = {
   STAFF: "/staff",
   ADMIN: "/home-admin",
   USER: "/home-user",
+  FORGOT_PASSWORD: "/forgot-password",
 };

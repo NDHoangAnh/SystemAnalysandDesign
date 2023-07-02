@@ -103,11 +103,8 @@ function AllStaffs() {
       )}
       {user.role === "admin" && (
         <div className="list-staff">
-          <div
-            className="search-bar"
-            style={{ position: "fixed", top: 16, right: 16 }}
-          >
-            <FormControl>
+          <div className="search-bar">
+            <FormControl fullWidth>
               <InputLabel htmlFor="search">Search by Username</InputLabel>
               <Input
                 id="search"
@@ -117,14 +114,14 @@ function AllStaffs() {
               />
             </FormControl>
           </div>
-          <TableContainer component={Paper} sx={{ mt: 8 }}>
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>Email</TableCell>
                   <TableCell>Họ tên</TableCell>
                   <TableCell>Số điện thoại</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -136,8 +133,13 @@ function AllStaffs() {
                     <TableCell>{staff.email}</TableCell>
                     <TableCell>{staff.username}</TableCell>
                     <TableCell>{staff.phone_number}</TableCell>
-                    <TableCell>
-                      <Button onClick={() => handleDeleteStaff(staff.email)}>
+                    <TableCell align="center">
+                      <Button variant="contained">Sửa</Button>
+                      <Button
+                        onClick={() => handleDeleteStaff(staff.email)}
+                        variant="contained"
+                        color="error"
+                      >
                         Xóa
                       </Button>
                     </TableCell>

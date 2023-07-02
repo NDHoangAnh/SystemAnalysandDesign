@@ -2,17 +2,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.image-room img {
-  width: 100%;
-  height: auto;
-  margin-left: 28vw;
+  gap: 5px;
 }
 
 .image-room-detail {
-  width: 50%;
-  height: 100%;
+  width: auto;
+  height: 35vh;
+  object-fit: cover;
 }
 
 .info-room {

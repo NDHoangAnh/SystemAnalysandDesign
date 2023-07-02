@@ -8,6 +8,7 @@ import Home from "./scenes/home/Home";
 import HomeUser from "./scenes/home/HomeUser";
 import HomeAdmin from "./scenes/home/HomeAdmin";
 import HomePage from "./scenes/home/HomePage";
+import ForgotPassword from "./scenes/forgotPassword/ForgotPassword";
 
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
           <Route path={route.USER} element={<HomeUser />}></Route>
           <Route path={route.ADMIN} element={<HomeAdmin />}></Route>
           <Route path={route.HOME} element={<HomePage />}></Route>
+          <Route
+            path={route.FORGOT_PASSWORD}
+            element={<ForgotPassword />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>

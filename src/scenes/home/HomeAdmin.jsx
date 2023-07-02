@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { route } from "../../configs/route";
 import { useEffect, useState } from "react";
 import User from "../detailUser/User";
+import NavBar from "../../components/NavBar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -65,10 +66,11 @@ export default function HomeAdmin() {
     if (user === undefined || user === null) {
       navigate(route.HOME);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
+      <NavBar />
       {user && (
         <Box
           sx={{

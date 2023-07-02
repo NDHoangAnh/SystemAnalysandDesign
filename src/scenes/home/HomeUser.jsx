@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import User from "../detailUser/User";
 import AllRooms from "../allRooms/AllRooms";
 import ListBookingUser from "../listBooking/ListBookingUser";
+import NavBar from "../../components/NavBar";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,6 +68,7 @@ export default function HomeUser() {
 
   return (
     <>
+      <NavBar />
       {user && (
         <Box
           sx={{

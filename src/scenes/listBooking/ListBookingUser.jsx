@@ -44,6 +44,7 @@ function ListBookingUser() {
 
   const handleDetailBookingUser = (booking) => {
     setChooseBooking(booking);
+    console.log(booking);
     showUserBooking();
   };
 
@@ -92,11 +93,11 @@ function ListBookingUser() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Số phòng</TableCell>
-                  <TableCell>Trạng thái</TableCell>
-                  <TableCell>Thời điểm gửi yêu cầu</TableCell>
-                  <TableCell>Thời điểm nhận phòng</TableCell>
-                  <TableCell>Thời điểm trả phòng</TableCell>
+                  <TableCell align="center">Số phòng</TableCell>
+                  <TableCell align="center">Trạng thái</TableCell>
+                  <TableCell align="center">Thời điểm gửi yêu cầu</TableCell>
+                  <TableCell align="center">Thời điểm nhận phòng</TableCell>
+                  <TableCell align="center">Thời điểm trả phòng</TableCell>
                   <TableCell align="center" colSpan={2}>
                     Thao tác
                   </TableCell>
@@ -119,14 +120,23 @@ function ListBookingUser() {
                       key={index}
                       sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                     >
-                      <TableCell>{booking?.roomDetail?.numRoom}</TableCell>
-                      <TableCell>{statusReq}</TableCell>
-                      <TableCell>{convertDate(booking?.createdAt)}</TableCell>
-                      <TableCell>{convertDate(booking?.startDate)}</TableCell>
-                      <TableCell>{convertDate(booking?.endDate)}</TableCell>
+                      <TableCell align="center">
+                        {booking?.roomDetail?.numRoom}
+                      </TableCell>
+                      <TableCell align="center">{statusReq}</TableCell>
+                      <TableCell align="center">
+                        {convertDate(booking?.createdAt)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {convertDate(booking?.startDate)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {convertDate(booking?.endDate)}
+                      </TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={() => handleDetailBookingUser(booking)}
+                          variant="contained"
                         >
                           Chi tiết
                         </Button>
@@ -134,6 +144,8 @@ function ListBookingUser() {
                       <TableCell align="center">
                         <Button
                           onClick={() => handleDeleteBooking(booking._id)}
+                          variant="contained"
+                          color="error"
                         >
                           Hủy yêu cầu
                         </Button>
