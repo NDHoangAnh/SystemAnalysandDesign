@@ -16,6 +16,8 @@ import {
   FormControl,
   Input,
   InputLabel,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import DropDown from "../../components/DropDownSelect";
 
@@ -29,10 +31,13 @@ export default function Room({
   homepage,
 }) {
   const user = JSON.parse(localStorage.getItem("user"));
+  const [loading, setLoading] = useState(false);
   const [detailRoom, setDetailRoom] = useState();
   const loadDetailRoom = async () => {
+    setLoading(true);
     const res = await handleDetailRoom(room.numRoom);
     setDetailRoom(res);
+    setLoading(false);
   };
 
   // delete
@@ -100,6 +105,12 @@ export default function Room({
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {detailRoom && room && (
         <>
           <ModalDelete

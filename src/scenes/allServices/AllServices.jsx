@@ -23,12 +23,16 @@ import {
   DialogContent,
   DialogActions,
   Fab,
+  Backdrop,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AllServices() {
+  const [loading, setLoading] = useState(false);
   const [services, setServices] = useState([]);
   const [infoService, setInfoService] = useState({
     name: "",
@@ -69,8 +73,10 @@ function AllServices() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const loadService = async () => {
+    setLoading(true);
     const result = await getAllServices();
     setServices(result);
+    setLoading(false);
   };
 
   const handleOpenDialog = () => {
@@ -116,6 +122,12 @@ function AllServices() {
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -145,12 +157,24 @@ function AllServices() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Tên dịch vụ</TableCell>
-                  <TableCell>Mô tả</TableCell>
-                  <TableCell>Số điện thoại</TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Tên dịch vụ
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>Mô tả</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Số điện thoại
+                    </Typography>
+                  </TableCell>
                   {user.role === "admin" && (
                     <TableCell align="center" colSpan={2}>
-                      Action
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Hành động
+                      </Typography>
                     </TableCell>
                   )}
                 </TableRow>
@@ -169,7 +193,7 @@ function AllServices() {
                         <TableCell align="center">
                           <Button
                             variant="contained"
-                            color="warning"
+                            color="primary"
                             onClick={() => handleShowDialogEdit(service)}
                           >
                             Sửa

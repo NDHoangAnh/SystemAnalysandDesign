@@ -9,6 +9,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import ModalDetail from "../../components/ModalDetail";
@@ -17,6 +19,7 @@ import DropDown from "../../components/DropDownSelect";
 import convertDate from "../../utils/convertDate";
 
 function ListBookingAdmin() {
+  const [loading, setLoading] = useState(false);
   const [listBooking, setListBooking] = useState([]);
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -83,7 +86,7 @@ function ListBookingAdmin() {
     {
       field: "action",
       headerName: "Thao tác",
-      width: "400px",
+      width: "30vw",
       renderCell: (params) => (
         <Box>
           <Button onClick={() => handleEdit(params.row._id)}>Cập nhật</Button>
@@ -99,12 +102,14 @@ function ListBookingAdmin() {
   const [detailBooking, setDetailBooking] = useState();
 
   const loadBooking = async () => {
+    setLoading(true);
     const result = await getAllBooking();
     if (result.message !== undefined) {
       toast.warning(result.message);
     } else {
       setListBooking(result);
     }
+    setLoading(false);
   };
 
   let row = [];
@@ -141,7 +146,7 @@ function ListBookingAdmin() {
   const handleDetail = (id) => {
     const _detailBooking = listBooking.filter((booking) => booking._id === id);
     setDetailBooking(_detailBooking[0]);
-    // console.log(detailBooking);
+    console.log(detailBooking);
     showModalDetail();
   };
 
@@ -173,6 +178,12 @@ function ListBookingAdmin() {
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {listBooking.length > 0 && (
         <>
           <ToastContainer
@@ -229,8 +240,10 @@ function ListBookingAdmin() {
             </DialogActions>
           </Dialog>
 
-          <Box sx={{ width: "101%" }}>
+          <Box sx={{ ml: 5 }}>
             <DataGrid
+              autoHeight
+              sx={{ width: "80vw" }}
               rows={row}
               columns={columns}
               pageSizeOptions={[10]}

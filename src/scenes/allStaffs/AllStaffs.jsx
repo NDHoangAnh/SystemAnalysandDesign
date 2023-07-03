@@ -18,12 +18,16 @@ import {
   DialogContent,
   DialogActions,
   Fab,
+  Backdrop,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function AllStaffs() {
+  const [loading, setLoading] = useState(false);
   const [staffs, setStaffs] = useState([]);
   const [infoStaff, setInfoStaff] = useState({
     name: "",
@@ -39,8 +43,10 @@ function AllStaffs() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const loadStaff = async () => {
+    setLoading(true);
     const result = await getAllStaffs();
     setStaffs(result);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -86,6 +92,12 @@ function AllStaffs() {
 
   return (
     <>
+      <Backdrop
+        open={loading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -118,10 +130,20 @@ function AllStaffs() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Họ tên</TableCell>
-                  <TableCell>Số điện thoại</TableCell>
-                  <TableCell align="center">Action</TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>Email</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>Họ tên</Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Số điện thoại
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography sx={{ fontWeight: "bold" }}>Action</Typography>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -134,7 +156,9 @@ function AllStaffs() {
                     <TableCell>{staff.username}</TableCell>
                     <TableCell>{staff.phone_number}</TableCell>
                     <TableCell align="center">
-                      <Button variant="contained">Sửa</Button>
+                      <Button variant="contained" sx={{ mr: 2 }}>
+                        Sửa
+                      </Button>
                       <Button
                         onClick={() => handleDeleteStaff(staff.email)}
                         variant="contained"

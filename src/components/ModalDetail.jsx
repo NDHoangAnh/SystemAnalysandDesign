@@ -11,6 +11,8 @@ import {
   Modal,
   Typography,
   Divider,
+  Grid,
+  Paper,
 } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -326,12 +328,152 @@ const ModalDetail = (props) => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
-            <Box className="user-booking">
-              Thông tin người đặt: {booking?.user?.username}
-            </Box>
-            <Box className="room-booking">
-              Phòng được đặt: {booking?.room?.numRoom}
-            </Box>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Box className="user-booking" sx={{ height: "40vh" }}>
+                  <Paper elevation={1} sx={{ height: "40vh", width: "30vw" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        marginTop: "1rem",
+                        marginLeft: "1rem",
+                      }}
+                    >
+                      Thông tin người đặt
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Tài khoản: {booking.user.username}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Tên: {booking.user.fullName ? booking.user.fullName : ""}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Email: {booking.user.email ? booking.user.email : ""}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Số điện thoại:{" "}
+                      {booking.user.phone_number
+                        ? booking.user.phone_number
+                        : ""}
+                    </Typography>
+                  </Paper>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box className="booking-detail" sx={{ height: "40vh" }}>
+                  <Paper elevation={1} sx={{ height: "40vh", width: "30vw" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        marginTop: "1rem",
+                        marginLeft: "1rem",
+                      }}
+                    >
+                      Thông tin đơn đặt phòng
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Giá: {booking.price}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Thời gian bắt đầu: {formatDate(booking.startDate)}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Thời gian kết thúc: {formatDate(booking.endDate)}
+                    </Typography>
+                  </Paper>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box className="room-booking" sx={{ height: "40vh" }}>
+                  <Paper elevation={1} sx={{ height: "40vh", width: "30vw" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        marginTop: "1rem",
+                        marginLeft: "1rem",
+                      }}
+                    >
+                      Thông tin phòng
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Phòng được đặt: {booking?.room?.numRoom}
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                    >
+                      Loại phòng:{" "}
+                      {booking.room.type === 1
+                        ? "Phòng bình dân"
+                        : booking.room.type === 2
+                        ? "Phòng thương gia"
+                        : "Phòng Vip"}
+                    </Typography>
+                  </Paper>
+                </Box>
+              </Grid>
+              <Grid item xs={6}>
+                <Box
+                  className="service-detail"
+                  sx={{ height: "40vh", overflowY: "auto" }}
+                >
+                  <Paper elevation={3} sx={{ width: "30vw" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{
+                        fontWeight: "bold",
+                        marginTop: "1rem",
+                        marginLeft: "1rem",
+                      }}
+                    >
+                      Thông tin dịch vụ
+                    </Typography>
+                    {booking.room.service.length > 0 &&
+                      booking.room.service.map((service, index) => (
+                        <Box key={index}>
+                          <Typography
+                            variant="h6"
+                            sx={{ marginTop: "1rem", marginLeft: "1rem" }}
+                          >
+                            {"> "}
+                            {service.service_name}
+                          </Typography>
+                          <Typography variant="subtitle2" color="gray">
+                            {service.description}
+                          </Typography>
+                        </Box>
+                      ))}
+                  </Paper>
+                </Box>
+              </Grid>
+            </Grid>
           </Box>
         </Modal>
       )}
