@@ -46,7 +46,7 @@ function ListBookingAdmin() {
     {
       field: "startDate",
       headerName: "Thời điểm nhận phòng",
-      width: 230,
+      width: 210,
       editable: true,
       valueGetter: (params) => {
         const date = new Date(params.row.startDate);
@@ -56,7 +56,7 @@ function ListBookingAdmin() {
     {
       field: "endDate",
       headerName: "Thời điểm trả phòng",
-      width: 230,
+      width: 210,
       editable: true,
       valueGetter: (params) => {
         const date = new Date(params.row.endDate);
@@ -240,7 +240,7 @@ function ListBookingAdmin() {
             </DialogActions>
           </Dialog>
 
-          <Box sx={{ ml: 5 }}>
+          <Box sx={{ ml: 0.5 }}>
             <DataGrid
               autoHeight
               sx={{ width: "80vw" }}

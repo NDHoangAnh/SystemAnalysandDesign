@@ -39,7 +39,6 @@ function ChangePass() {
       new_pass: "",
       confirm_pass: "",
     });
-    window.location.reload();
   };
 
   return (

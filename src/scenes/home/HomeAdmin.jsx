@@ -59,7 +59,7 @@ export default function HomeAdmin() {
 
   const hanleLogout = () => {
     localStorage.clear();
-    navigate(route.LOGIN);
+    navigate(route.HOME);
   };
 
   useEffect(() => {

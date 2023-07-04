@@ -12,10 +12,7 @@ import {
 import { editUser } from "../../apis";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { DatePicker } from "@mui/x-date-pickers";
+
 function User() {
   const user = JSON.parse(localStorage.getItem("user"));
   const [loading, setLoading] = useState(false);
@@ -98,7 +95,7 @@ function User() {
           />
         </FormControl>
 
-        <FormControl>
+        {/* <FormControl>
           <InputLabel htmlFor="phone">Địa chỉ</InputLabel>
           <Input
             id="address"
@@ -107,19 +104,7 @@ function User() {
             value={userInfo.address ? userInfo.address : ""}
             onChange={(e) => handleOnChange(e)}
           />
-        </FormControl>
-
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              id="date_of_birth"
-              name="date_of_birth"
-              label="Ngày tháng năm sinh"
-              sx={{ width: "100vw" }}
-              onChange={(e) => handleOnChange(e)}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
+        </FormControl> */}
 
         <Button
           variant="contained"
